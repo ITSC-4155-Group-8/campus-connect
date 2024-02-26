@@ -3,16 +3,16 @@ Campus Connect is a social network to connect you with college classmates who sh
 
 # Scrum Master
 
-[Team Member 1]
+Andrew Bertlshofer
 
 # Product Owner
 
-[Team Member 2]
+Pedro Quintero-Sanchez
 
 # Developer
 
-[Team Member 3]
+Carson Webb
 
-[Team Member 4]
+Kai Reichow
 
-[Team Member 5]
+Noah Piraino
