@@ -12,6 +12,7 @@
     "build:client": "cd client && npm run build"
   },
   "devDependencies": {
+    "@types/node": "^20.11.20",
     "concurrently": "^8.2.2"
   }
 }
