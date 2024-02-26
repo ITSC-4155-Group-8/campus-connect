@@ -1,15 +1,17 @@
 # Campus-Connect
 Campus Connect is a social network to connect you with college classmates who share similar interests and hobbies
 
-# Scrum Master
+## Team Members
+
+### Scrum Master
 
 Andrew Bertlshofer
 
-# Product Owner
+### Product Owner
 
 Pedro Quintero-Sanchez
 
-# Developer
+### Developer
 
 Carson Webb
 
