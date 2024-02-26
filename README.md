@@ -7,12 +7,12 @@ Andrew Bertlshofer
 
 # Product Owner
 
-[Team Member 2]
+Pedro Quintero-Sanchez
 
 # Developer
 
 Carson Webb
 
-[Team Member 4]
+Kai Reichow
 
-[Team Member 5]
+Noah Piraino

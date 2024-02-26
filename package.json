@@ -4,10 +4,14 @@
   "description": "a college social network based on interests and hobbies",
   "main": "index.js",
   "scripts": {
-    "dev": "",
+    "start": "npm run dev",
+    "dev": "concurrently -n \"CLIENT,SERVER\" \"npm:dev:client\" \"npm:dev:server\"",
     "dev:client": "cd client && npm run dev",
     "dev:server": "cd server && flask run",
     "build": "mkdir dist && cp -r server/* dist/ && npm run build:client && cp -r client/dist/* dist/static/",
     "build:client": "cd client && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }
