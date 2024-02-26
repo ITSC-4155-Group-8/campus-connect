@@ -1,0 +1,13 @@
+{
+  "name": "campusconnect",
+  "version": "1.0.0",
+  "description": "a college social network based on interests and hobbies",
+  "main": "index.js",
+  "scripts": {
+    "dev": "",
+    "dev:server": "cd client && npm run dev",
+    "dev:client": "cd server && flask run",
+    "build": "mkdir dist && cp -r server/* dist/ && npm run build:client && cp -r client/dist/* dist/static/",
+    "build:client": "cd client && npm run build"
+  }
+}
