@@ -11,7 +11,7 @@ Campus Connect is a social network to connect you with college classmates who sh
 
 # Developer
 
-[Team Member 3]
+[Carson Webb]
 
 [Team Member 4]
 
