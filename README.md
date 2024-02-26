@@ -3,7 +3,7 @@ Campus Connect is a social network to connect you with college classmates who sh
 
 # Scrum Master
 
-[Team Member 1]
+Andrew Bertlshofer
 
 # Product Owner
 
