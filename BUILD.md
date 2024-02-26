@@ -17,9 +17,9 @@
    cd server
    python -m venv .venv
    source .venv/bin/activate     # For Linux
-   .venv/Scripts/activate.bat    # For Windows
+   .venv/Scripts/activate.bat    # For Windows cmd
    source .venv/Scripts/activate # For Windows Bash
-   pip install < requirements.txt
+   pip install -r requirements.txt
    ```
 
 ## Development Server
