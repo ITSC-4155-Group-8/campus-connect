@@ -16,7 +16,8 @@
    ```sh
    cd server
    python -m venv .venv
-   source .venv/bin/activate
+   source .venv/bin/activate #For Linux
+   source .venv/Scripts/activate #For Windows
    pip install < requirements.txt
    ```
 
