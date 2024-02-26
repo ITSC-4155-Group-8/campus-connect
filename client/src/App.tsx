@@ -1,14 +1,17 @@
 import { Link, Route, Switch } from "wouter";
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
+import './App.css'
 
 function App() {
     return (
         <>
-            <nav>
-                <Link href="/">Home</Link>
-                <Link href="/login">Login</Link>
-            </nav>
+            <header className = "header">
+                <nav>
+                    <Link href="/">Home</Link>
+                    <Link href="/login">Login</Link>
+                </nav>
+            </header>
 
             <div>
                 {/* Routes below are matched exclusively - the first matched route gets rendered */}
@@ -24,6 +27,14 @@ function App() {
                     <Route>404: No such page!</Route>
                 </Switch>
             </div>
+
+            {/* Footer is under construction 
+            {<footer className="sticky-footer">
+                <div id="links">
+                    <a href="">Contact Us</a>
+                    <a href="">About</a>
+                </div>
+            </footer>} */}
         </>
     )
 }
