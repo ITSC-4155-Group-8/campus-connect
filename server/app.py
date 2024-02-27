@@ -7,7 +7,7 @@ CORS(app)
 
 @app.route('/api')
 def get_api():
-    return 'Campus Connect API'
+    return 'Campus Connect API v0.1.0'
 
 # redirect 404 errors to the index file to be handled by the client
 @app.errorhandler(404)

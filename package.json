@@ -1,6 +1,6 @@
 {
-  "name": "campusconnect",
-  "version": "1.0.0",
+  "name": "campus-connect",
+  "version": "0.1.0",
   "description": "a college social network based on interests and hobbies",
   "main": "index.js",
   "scripts": {
