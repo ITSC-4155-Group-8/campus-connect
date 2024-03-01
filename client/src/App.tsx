@@ -2,6 +2,7 @@ import { Route, Switch } from "wouter";
 import { Container } from '@chakra-ui/react';
 
 import Header from "./components/Header";
+import Footer from "./components/Footer"; 
 
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
@@ -21,6 +22,8 @@ function App() {
                     <Route>404: No such page!</Route>
                 </Switch>
             </Container>
+
+            <Footer />
         </>
     )
 }

@@ -10,6 +10,14 @@ const overrides = {
 				color: "white",
 				backgroundColor: "#4444f0",
 				boxShadow: "0 0 10px 0 black"
+			},
+			footer: {
+				top: 0,
+				left: 0,
+				right: 0,
+				color: "white",
+				backgroundColor: "#4444f0",
+				boxShadow: "0 0 10px 0 black"
 			}
 		}
 	},
