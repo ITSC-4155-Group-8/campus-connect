@@ -1,39 +1,34 @@
 import os
 import json
-
-from flask import Flask, redirect, request, url_for, send_file
-from flask_cors import CORS
-
-from flask_login import (
-    LoginManager,
-    current_user,
-    login_required,
-    login_user,
-    logout_user,
-)
-from oauthlib.oauth2 import WebApplicationClient
 import requests
-
-from models import db, User
-
 from dotenv import load_dotenv
+from flask import Flask, request, redirect, send_file
+from flask_cors import CORS
+from flask_login import LoginManager, current_user, login_required, login_user, logout_user
+from oauthlib.oauth2 import WebApplicationClient
+
+from flask_pymongo import PyMongo
+from flask_login import UserMixin
 
 load_dotenv()
 
-GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
-GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
+MONGO_URI = os.getenv("MONGO_URI")
+
+# https://realpython.com/flask-google-login/
+SECRET_KEY = os.getenv("SECRET_KEY")
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 GOOGLE_DISCOVERY_URL = "https://accounts.google.com/.well-known/openid-configuration"
 
 # serve static files at the server route
 app = Flask(__name__, static_url_path="", static_folder="static")
+# database setup
+app.config["MONGO_URI"] = MONGO_URI
+# secret key for built in https
+app.secret_key = SECRET_KEY or os.urandom(24)
+db = PyMongo(app).db
+# enable CORS
 CORS(app)
-
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
-app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
-
-db.init_app(app)
-with app.app_context():
-    db.create_all()
 
 # User session management setup
 # https://flask-login.readthedocs.io/en/latest
@@ -49,8 +44,26 @@ def get_google_provider_cfg():
 # Flask-Login helper to retrieve a user from our db
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(user_id)
+    return User.get_user_by_id(user_id)
 
+# MODELS ------------------------------
+
+class User(UserMixin):
+    def __init__(self, id, name, email, profile_pic):
+        self.id = id
+        self.name = name
+        self.email = email
+        self.profile_pic = profile_pic
+
+    @staticmethod
+    def get_user_by_id(id):
+        user = db.users.find_one({"id": id})
+        if user:
+            print(user)
+            return User(user["id"], user["name"], user["email"], user["profile_pic"])
+        return None
+
+# ROUTES ------------------------------
 
 @app.route("/login")
 def login():
@@ -117,9 +130,9 @@ def callback():
     )
     
     # Doesn't exist? Add it to the database.
-    if not User.query.get(unique_id):
-        db.session.add(user)
-        db.session.commit()
+    if not User.get_user_by_id(unique_id):
+        print(vars(user))
+        db.users.insert_one(vars(user))
     
     # Begin user session by logging the user in
     login_user(user)
