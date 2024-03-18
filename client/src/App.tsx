@@ -7,6 +7,7 @@ import Footer from "./components/Footer";
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import APITestPage from './pages/APITestPage';
+import AboutUsPage from './pages/AboutUsPage'; 
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                     <Route path="/" component={HomePage} />
                     <Route path="/login" component={LoginPage} />
                     <Route path="/apitest" component={APITestPage} />
+                    <Route path="/about" component={AboutUsPage} />
                     <Route>404: No such page!</Route>
                 </Switch>
             </Container>
