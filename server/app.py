@@ -14,6 +14,9 @@ load_dotenv()
 
 MONGO_URI = os.getenv("MONGO_URI")
 
+# frontend url for login redirect
+URL = os.getenv("URL")
+
 # https://realpython.com/flask-google-login/
 SECRET_KEY = os.getenv("SECRET_KEY")
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
@@ -138,7 +141,7 @@ def callback():
     login_user(user)
     
     # Send user back to homepage
-    return redirect("/api")
+    return redirect(URL)
 
 
 @app.route("/logout")
@@ -158,7 +161,8 @@ def get_api():
 # redirect 404 errors to the index file to be handled by the client
 @app.errorhandler(404)
 def page_not_found(e):
-    return send_file("static/index.html"), 200
+    return redirect(URL)
+#    return send_file("static/index.html"), 200
 
 # -------------------------------------
 
