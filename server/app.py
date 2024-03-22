@@ -31,12 +31,14 @@ app.config["MONGO_URI"] = MONGO_URI
 app.secret_key = SECRET_KEY or os.urandom(24)
 db = PyMongo(app).db
 # enable CORS
-CORS(app)
+CORS(app, supports_credentials=True)
 
 # User session management setup
 # https://flask-login.readthedocs.io/en/latest
 login_manager = LoginManager()
 login_manager.init_app(app)
+# require https for session cookies
+app.config['SESSION_COOKIE_SECURE'] = True
 
 # OAuth 2 client setup
 client = WebApplicationClient(GOOGLE_CLIENT_ID)

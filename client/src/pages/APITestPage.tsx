@@ -4,7 +4,9 @@ function APITestPage() {
 	const [state, setState] = useState({ text: "" });
 	useEffect(() => {
 		async function fetchData() {
-			const response = await fetch(import.meta.env.PROD ? '/api' : 'http://localhost:5000/api')
+			const response = await fetch(apiURL, {
+				credentials: "include",
+			})
 			const text = await response.text()
 			setState({ text: text })
 		}
