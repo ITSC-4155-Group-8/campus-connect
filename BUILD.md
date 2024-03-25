@@ -21,6 +21,9 @@
    source .venv/Scripts/activate # For Windows Bash
    pip install -r requirements.txt
    ```
+5. Setup a MongoDB database, add the connection string in `server/.env`
+6. Setup a Google OAuth key [https://console.cloud.google.com/apis/credentials](https://console.cloud.google.com/apis/credentials), add `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` to `server/.env`
+7. Set `URL` in `server/.env` to the URL your frontend is reached at (`https://127.0.0.1:5173` in the dev environment)
 
 ## Development Server
 The development server can be started from the root directory with the following command:
