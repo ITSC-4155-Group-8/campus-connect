@@ -7,8 +7,6 @@ import {
     Button,
     Stack,
     Collapse,
-    Popover,
-    PopoverTrigger,
     useColorModeValue,
     useBreakpointValue,
     useDisclosure,
@@ -59,17 +57,17 @@ export default function WithSubnavigation() {
                     justify={'flex-end'}
                     direction={'row'}
                     spacing={6}>
-                    <Button as={'a'} fontSize={'sm'} fontWeight={400} variant={'link'} href={'#'}>
+                    <Button as={'a'} fontSize={'sm'} fontWeight={400} variant={'link'} href={loginURL}>
                         Sign In
                     </Button>
                     <Button
-                        as={'a'}
+                        as={Link}
                         display={{ base: 'none', md: 'inline-flex' }}
                         fontSize={'sm'}
                         fontWeight={600}
                         color={'white'}
                         bg={'pink.400'}
-                        href={'#'}
+                        href={'/signup'}
                         _hover={{
                             bg: 'pink.300',
                         }}>
