@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import { Link } from "react-router-dom";
 import {
     Box,
     Flex,
@@ -7,8 +7,6 @@ import {
     Button,
     Stack,
     Collapse,
-    Popover,
-    PopoverTrigger,
     useColorModeValue,
     useBreakpointValue,
     useDisclosure,
@@ -59,17 +57,17 @@ export default function WithSubnavigation() {
                     justify={'flex-end'}
                     direction={'row'}
                     spacing={6}>
-                    <Button as={'a'} fontSize={'sm'} fontWeight={400} variant={'link'} href={'#'}>
+                    <Button as={'a'} fontSize={'sm'} fontWeight={400} variant={'link'} href={loginURL}>
                         Sign In
                     </Button>
                     <Button
-                        as={'a'}
+                        as={Link}
                         display={{ base: 'none', md: 'inline-flex' }}
                         fontSize={'sm'}
                         fontWeight={600}
                         color={'white'}
                         bg={'pink.400'}
-                        href={'#'}
+                        to={'/signup'}
                         _hover={{
                             bg: 'pink.300',
                         }}>
@@ -96,7 +94,7 @@ const DesktopNav = () => {
                     <Box
                         as={Link}
                         p={2}
-                        href={navItem.href ?? '#'}
+                        to={navItem.href ?? '#'}
                         fontSize={'sm'}
                         fontWeight={500}
                         color={linkColor}
@@ -128,7 +126,7 @@ const MobileNavItem = ({ label, href }: NavItem) => {
             <Box
                 py={2}
                 as={Link}
-                href={href ?? '#'}
+                to={href ?? '#'}
                 justifyContent="space-between"
                 alignItems="center"
                 _hover={{

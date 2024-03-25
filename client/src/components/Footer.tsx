@@ -1,4 +1,4 @@
-import { Link } from 'wouter'
+import { Link } from 'react-router-dom'
 import {
     Box,
     Container,
@@ -22,7 +22,7 @@ export default function Footer() {
                 align={{ base: 'center', md: 'center' }}>
                 <Text>© 2024 CampusConnect. All rights reserved</Text>
                 <Stack direction={'row'} spacing={6}>
-                    <Link href="/about">About Us</Link>
+                    <Link to="/about">About Us</Link>
                 </Stack>
             </Container>
         </Box>
