@@ -1,4 +1,4 @@
-import { Link } from "wouter"
+import { Link } from "react-router-dom"
 import PropTypes from "prop-types"
 import imgsrc from "../assets/logo.png"
 import {

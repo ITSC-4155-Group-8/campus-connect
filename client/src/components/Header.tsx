@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import { Link } from "react-router-dom";
 import {
     Box,
     Flex,
@@ -67,7 +67,7 @@ export default function WithSubnavigation() {
                         fontWeight={600}
                         color={'white'}
                         bg={'pink.400'}
-                        href={'/signup'}
+                        to={'/signup'}
                         _hover={{
                             bg: 'pink.300',
                         }}>
@@ -94,7 +94,7 @@ const DesktopNav = () => {
                     <Box
                         as={Link}
                         p={2}
-                        href={navItem.href ?? '#'}
+                        to={navItem.href ?? '#'}
                         fontSize={'sm'}
                         fontWeight={500}
                         color={linkColor}
@@ -126,7 +126,7 @@ const MobileNavItem = ({ label, href }: NavItem) => {
             <Box
                 py={2}
                 as={Link}
-                href={href ?? '#'}
+                to={href ?? '#'}
                 justifyContent="space-between"
                 alignItems="center"
                 _hover={{
