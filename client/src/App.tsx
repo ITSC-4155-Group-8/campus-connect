@@ -15,8 +15,12 @@ function App() {
 
     if (!state.user) return (
         <>
-            <Container style={{height: "calc(100vh - 60px)"}} maxWidth="container.lg">
-                <SplashPage />
+            <Header />
+            <Container style={{height: "calc(100vh - 120px)"}} maxWidth="container.lg">
+                <Flex direction='column' justifyContent='center' height='100%'>
+                    <SplashPage />
+                </Flex>
+                
             </Container>
 
             <Footer />

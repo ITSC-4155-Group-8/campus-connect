@@ -8,6 +8,7 @@ import {
     Heading,
     Stack,
     Text,
+    Center,
 } from "@chakra-ui/react"
 
 export default function Hero() {
@@ -15,16 +16,14 @@ export default function Hero() {
         <>
             <Flex direction="column">
                 <Heading textAlign="center">Welcome to CampusConnect</Heading>
-                <Flex direction="row-reverse">
-                    <Box w={{ base: "70%", sm: "60%", md: "50%" }} mb={{ base: 12, md: 0 }}>
-                        <Image src={imgsrc} sizes="90%" rounded="1rem" shadow="2xl" />
-                    </Box>
-                    <Flex direction="column">
+                <Flex direction="row-reverse" flexWrap="wrap" justifyContent='center'>
+                        <Image src={imgsrc} maxWidth={'400px'} rounded="1rem" />
+                    <Flex direction="column" justifyContent='center'flexWrap='wrap'>
                         <Text>
 
                             Connect with people on your campus today.
                         </Text>
-                        <Flex>
+                        <Flex justifyContent={'center'}>
                             <Button
                                 size="md"
                             >
