@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom"
-import PropTypes from "prop-types"
 import imgsrc from "../assets/logo.png"
 import {
     Box,
@@ -11,93 +10,35 @@ import {
     Text,
 } from "@chakra-ui/react"
 
-export default function Hero({
-    title = "Welcome to Campus-Connect",
-    subtitle = "Connect with people on your campus today.",
-    image = imgsrc,
-    ctaLink = "",
-    ctaText = "Test",
-    ...rest
-}) {
+export default function Hero() {
     return (
-        <Flex
-            align="center"
-            justify={{ base: "center", md: "space-around", xl: "space-between" }}
-            direction={{ base: "column-reverse", md: "row" }}
-            wrap="nowrap"
-            minH="70vh"
-            px={8}
-            mb={16}
-            {...rest}
-        >
-            <Stack
-                spacing={4}
-                w={{ base: "80%", md: "40%" }}
-                align={["center", "center", "flex-start", "flex-start"]}
-            >
-                <Heading
-                    as="h1"
-                    size="xl"
-                    fontWeight="bold"
-                    color="primary.800"
-                    textAlign={["center", "center", "left", "left"]}
-                >
-                    {title}
-                </Heading>
-                <Heading
-                    as="h2"
-                    size="md"
-                    color="primary.800"
-                    opacity="0.8"
-                    fontWeight="normal"
-                    lineHeight={1.5}
-                    textAlign={["center", "center", "left", "left"]}
-                >
-                    {subtitle}
-                </Heading>
-                <Link to={ctaLink}>
-                    <Button
-                        colorScheme="primary"
-                        borderRadius="8px"
-                        py="4"
-                        px="4"
-                        lineHeight="1"
-                        size="md"
-                    >
-                        {ctaText}
-                    </Button>
-                </Link>
-                {/* Below is commented out incase we want to add text here at some point */}
-                {/* <Text
-          fontSize="xs"
-          mt={2}
-          textAlign="center"
-          color="primary.800"
-          opacity="0.6"
-        >
-          
-        </Text> */}
-            </Stack>
-            <Box w={{ base: "70%", sm: "60%", md: "50%" }} mb={{ base: 12, md: 0 }}>
-                <Image src={image} sizes="90%" rounded="1rem" shadow="2xl" />
-            </Box>
-        </Flex>
+        <>
+            <Flex direction="column">
+                <Heading textAlign="center">Welcome to CampusConnect</Heading>
+                <Flex direction="row-reverse">
+                    <Box w={{ base: "70%", sm: "60%", md: "50%" }} mb={{ base: 12, md: 0 }}>
+                        <Image src={imgsrc} sizes="90%" rounded="1rem" shadow="2xl" />
+                    </Box>
+                    <Flex direction="column">
+                        <Text>
+
+                            Connect with people on your campus today.
+                        </Text>
+                        <Flex>
+                            <Button
+                                size="md"
+                            >
+                                Log In
+                            </Button>
+                            <Button
+                                size="md"
+                            >
+                                Sign Up
+                            </Button>
+                        </Flex>
+                    </Flex>
+                </Flex>
+            </Flex>
+        </>
     )
 }
-
-Hero.propTypes = {
-    title: PropTypes.string,
-    subtitle: PropTypes.string,
-    image: PropTypes.string,
-    ctaText: PropTypes.string,
-    ctaLink: PropTypes.string,
-}
-
-// Hero.defaultProps = {
-//   title: "React landing page with Chakra UI",
-//   subtitle:
-//     "This is the subheader section where you describe the basic benefits of your product",
-//   image: "<https://source.unsplash.com/collection/404339/800x600>",
-//   ctaText: "Create your account now",
-//   ctaLink: "/signup",
-// }
