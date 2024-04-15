@@ -24,7 +24,7 @@ function App() {
                 
             </Container>
 
-            <NavFooter />
+            <Footer />
         </>
     );
 
