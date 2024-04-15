@@ -4,6 +4,7 @@ import { Box, Container, Flex } from '@chakra-ui/react';
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import NavFooter from "./components/NavFooter";
 
 import SplashPage from "./pages/SplashPage";
 import OnboardingPage from "./pages/OnboardingPage";
@@ -23,7 +24,7 @@ function App() {
                 
             </Container>
 
-            <Footer />
+            <NavFooter />
         </>
     );
 

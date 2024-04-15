@@ -19,7 +19,7 @@ export default function Header() {
     return (
         <Box height='60px'>
             <Flex
-                bg={useColorModeValue('blue.50', 'gray.800')}
+                bg={useColorModeValue('blue.200', 'gray.800')}
                 color={useColorModeValue('gray.600', 'white')}
                 minH={'60px'}
                 py={{ base: 2 }}
