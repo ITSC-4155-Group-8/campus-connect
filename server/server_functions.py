@@ -24,7 +24,7 @@ import json
 
 # api key for vectorized db
 pc = Pinecone(api_key='59f47e61-ea2e-43fa-945c-432d3e67f190')
-
+#change
 # connecting to mongo db
 connection_string = "mongodb+srv://test:<test@itsc4155.okxsgq3.mongodb.net/"
 client_mongodb = MongoClient(connection_string, username='test', password='test')
@@ -47,58 +47,6 @@ client = OpenAI( # please don't share this key it charges to my account
 )
 # vectorization model
 MODEL = "text-embedding-3-small"
-
-
-
-def verify_pc_connection():
-    if pc_index.describe_index_stats() != None:
-        return True
-    else:
-        return False
-
-def verify_mongodb_records_connection():
-    if mongodb_records.count_documents({}) != None:
-        return True
-    else:
-        return False
-
-def verify_mongodb_records_connection():
-    if mongodb_record_matches.count_documents({}) != None:
-        return True
-    else:
-        return False
-
-def verify_openai_connection():
-    # funky behavior res and openAI api stuff in same block in collab to work
-    #set vectorization model + verify chatGPT API connection
-    res = client.embeddings.create(
-        input=[
-            "Sample document text goes here"
-        ], model=MODEL
-    )
-    if res != None:
-        print(res)
-        return True
-    else:
-        print(res)
-        return False
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # Function Name --- data_to_embed
