@@ -12,6 +12,7 @@ import {
     Center,
     Spacer,
 } from "@chakra-ui/react"
+import { link } from "fs"
 
 export default function Hero({
     title = "Welcome to Campus-Connect",
@@ -34,14 +35,17 @@ export default function Hero({
                         </Text>
                         <Flex justifyContent={'center'}>
                             <Button
+                                as={Link}
                                 size="md"
                                 bg={'blue.100'}
                             >
                                 Log In
                             </Button>
                             <Button
+                                as={Link}
                                 size="md"
                                 bg={'blue.100'}
+                                to={'/signup'}
                             >
                                 Sign Up
                             </Button>
