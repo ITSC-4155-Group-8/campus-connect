@@ -37,3 +37,7 @@ The project can be built from the root directory with the following command:
 npm run build
 ```
 The build files will be output into the `dist` folder
+
+## Optional - Developers ONLY
+If a dependice is not found in the project tree during development
+please repeat steps 1 - 7
