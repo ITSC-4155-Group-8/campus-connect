@@ -33,6 +33,7 @@ export default function Hero({
 
                             Connect with people on your campus today.
                         </Text>
+                        
                         <Flex justifyContent={'center'}>
                             <Button
                                 as={Link}
@@ -41,6 +42,7 @@ export default function Hero({
                             >
                                 Log In
                             </Button>
+                            <Spacer width="14"/>
                             <Button
                                 as={Link}
                                 size="md"
