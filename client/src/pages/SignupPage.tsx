@@ -31,8 +31,6 @@ function SignupPage() {
             <Spacer height="14"/>
             <Input placeholder='Last Name' />
             <Spacer height="14"/>
-            <Input placeholder='Email Name' />
-            <Spacer height="14"/>
             <Select placeholder='Select Year'>
                 <option value='option1'>Freshman</option>
                 <option value='option2'>Sophmore</option>
