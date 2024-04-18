@@ -6,6 +6,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import NavFooter from "./components/NavFooter";
 
+import SignupPage from "./pages/SignupPage";
 import SplashPage from "./pages/SplashPage";
 import OnboardingPage from "./pages/OnboardingPage";
 
@@ -19,7 +20,7 @@ function App() {
             <Header />
             <Container style={{height: "calc(100vh - 120px)"}} maxWidth="container.lg">
                 <Flex direction='column' justifyContent='center' height='100%'>
-                    <SplashPage />
+                    <SplashPage/>
                 </Flex>
                 
             </Container>
