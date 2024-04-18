@@ -12,16 +12,8 @@ import {
     Center,
     Spacer,
 } from "@chakra-ui/react"
-import { link } from "fs"
 
-export default function Hero({
-    title = "Welcome to Campus-Connect",
-    subtitle = "Connect with people on your campus today.",
-    image = imgsrc,
-    ctaLink = "",
-    ctaText = "Test",
-    ...rest
-}) {
+export default function Hero() {
     return (
         <>
             <Flex direction="column">
@@ -39,6 +31,7 @@ export default function Hero({
                                 as={Link}
                                 size="md"
                                 bg={'blue.100'}
+                                to={loginURL}
                             >
                                 Log In
                             </Button>
@@ -47,7 +40,7 @@ export default function Hero({
                                 as={Link}
                                 size="md"
                                 bg={'blue.100'}
-                                to={'/signup'}
+                                to={loginURL}
                             >
                                 Sign Up
                             </Button>
