@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import SplashPage from "./pages/SplashPage";
 import SignupPage from "./pages/SignupPage";
+import MainPage from "./pages/MainPage";
 
 function App() {
     const [state, setState] = useState({
