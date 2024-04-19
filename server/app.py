@@ -2,7 +2,7 @@ import os
 import json
 import requests
 from dotenv import load_dotenv
-from flask import Flask, request, jsonify, redirect, send_file
+from flask import Flask, request, jsonify, redirect, send_file, Response
 from flask_cors import CORS
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 from oauthlib.oauth2 import WebApplicationClient
@@ -54,18 +54,17 @@ def load_user(user_id):
 # MODELS ------------------------------
 
 class User(UserMixin):
-    def __init__(self, id, name, email, profile_pic, new):
+    def __init__(self, id, name, email, profile_pic):
         self.id = id
         self.name = name
         self.email = email
         self.profile_pic = profile_pic
-        self.new = new
 
     @staticmethod
     def get_user_by_id(id):
         user = db.users.find_one({"id": id})
         if user:
-            return User(user["id"], user["name"], user["email"], user["profile_pic"], user["new"])
+            return User(user["id"], user["name"], user["email"], user["profile_pic"])
         return None
 
 # ROUTES ------------------------------
@@ -134,7 +133,7 @@ def callback():
     exists = User.get_user_by_id(unique_id)
 
     user = User(
-        id=unique_id, name=users_name, email=users_email, profile_pic=picture, new=bool(not exists)
+        id=unique_id, name=users_name, email=users_email, profile_pic=picture
     )
     
     # Doesn't exist? Add it to the database.
@@ -162,10 +161,27 @@ def get_api():
     return "Campus Connect API v0.1.0"
 
 
-@app.route("/api/profile")
+@app.route("/api/profile", methods = ['GET', 'POST'])
 @login_required
 def get_profile_data():
-    return jsonify(User.get_user_by_id(current_user.id).__dict__)
+    if request.method == 'GET':
+        user_data = db.user_data.find_one({'id': current_user.id})
+        if not user_data:
+            return Response(status=404)
+        user_data.pop('_id')
+        return jsonify({'user': User.get_user_by_id(current_user.id).__dict__, 'user_data': user_data})
+    if request.method == 'POST':
+        data = request.get_json()
+        db.user_data.replace_one({'id': current_user.id}, {
+            'id': current_user.id,
+            'firstname': data['firstname'],
+            'lastname': data['lastname'],
+            'gender': data['gender'],
+            'age': data['age'],
+            'grade': data['grade'],
+            'major': data['major'],
+        }, upsert=True)
+        return Response(status=200)
 
 
 # redirect 404 errors to the index file to be handled by the client
