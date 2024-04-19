@@ -10,8 +10,6 @@ import theme from './theme';
 import App from './App.tsx'
 
 import HomePage from './pages/HomePage';
-import SignupPage from "./pages/SignupPage";
-import APITestPage from './pages/APITestPage';
 
 const router = createBrowserRouter([
     {
@@ -22,14 +20,6 @@ const router = createBrowserRouter([
             {
                 path: "",
                 element: <HomePage />,
-            },
-            {
-                path: "signup",
-                element: <SignupPage />,
-            },
-            {
-                path: "apitest",
-                element: <APITestPage />,
             },
         ],
     },
