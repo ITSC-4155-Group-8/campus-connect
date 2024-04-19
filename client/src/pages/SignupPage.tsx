@@ -58,7 +58,7 @@ function SignupPage() {
             <Spacer height="14"/>
             <Input placeholder='Minor' />
             <Spacer height="14"/>
-            <Button onClick={buttonClick} colorScheme='blue'>Submit</Button>
+            <Button onClick={buttonClick} colorScheme='blue'>Next</Button>
         </Flex>
     )
 }
