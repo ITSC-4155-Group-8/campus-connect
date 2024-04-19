@@ -47,12 +47,17 @@ function SignupPage() {
     } = useForm<Inputs>()
 
     function onSubmit(values) {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                alert(JSON.stringify(values, null, 2))
-                resolve()
-            }, 3000)
+        fetch(apiURL + '/profile', {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(values)
+        }).then((response) => {
+            if (response.status < 300) window.location.reload();
         })
+
     }
 
     return (

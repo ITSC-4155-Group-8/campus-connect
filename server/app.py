@@ -2,7 +2,7 @@ import os
 import json
 import requests
 from dotenv import load_dotenv
-from flask import Flask, request, jsonify, redirect, send_file
+from flask import Flask, request, jsonify, redirect, send_file, Response
 from flask_cors import CORS
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 from oauthlib.oauth2 import WebApplicationClient
@@ -162,10 +162,18 @@ def get_api():
     return "Campus Connect API v0.1.0"
 
 
-@app.route("/api/profile")
+@app.route("/api/profile", methods = ['GET', 'POST'])
 @login_required
 def get_profile_data():
-    return jsonify(User.get_user_by_id(current_user.id).__dict__)
+    if request.method == 'GET':
+        return jsonify(User.get_user_by_id(current_user.id).__dict__)
+    if request.method == 'POST':
+        data = request.get_json()
+        print(request.get_json())
+        data['id'] = current_user.id
+        db.user_data.insert_one(vars(data))
+        print(data)
+        return Response(200)
 
 
 # redirect 404 errors to the index file to be handled by the client
