@@ -293,6 +293,7 @@ def create_record(user):
   # add vectorized values to pinecone_db
   insert_user_into_pinecone_db(mongodb_user, inserted_id, embedded_list, list_of_pinecone_tags)
   #print('sucessfly created record in both data bases :)')
+  return True
 
 
 
@@ -877,8 +878,6 @@ def get_user_profile(email):
     }
   print(mongodb_user)
   return mongodb_user
-
-
 
 
 
