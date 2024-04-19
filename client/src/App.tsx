@@ -11,7 +11,8 @@ import SignupPage from "./pages/SignupPage";
 function App() {
     const [state, setState] = useState({
         loading: true,
-        user: null
+        user: null,
+        loggedin: false
     });
     useEffect(() => {
         async function fetchData() {
@@ -19,10 +20,14 @@ function App() {
                 const response = await fetch(apiURL + '/profile', {
                     credentials: "include",
                 })
-                const json = await response.json()
-                setState({ user: json, loading: false })
+                if (response.status == 404) {
+                    setState({ user: null, loading: false, loggedin: true })
+                } else {
+                    const json = await response.json()
+                    setState({ user: json, loading: false, loggedin: true })
+                }
             } catch {
-                setState({ user: null, loading: false })
+                setState({ user: null, loading: false, loggedin: false })
             }
         }
 
@@ -44,7 +49,7 @@ function App() {
             <>
                 <Header />
                 <Container style={{ height: "calc(100vh - 120px)" }} maxWidth="container.lg">
-                    {!state.user ? <SplashPage /> : state.user.new ? <SignupPage /> : <Outlet />}
+                    {!state.loggedin ? <SplashPage /> : !state.user ? <SignupPage /> : <Outlet />}
                 </Container>
                 <Footer />
             </>
