@@ -2,7 +2,7 @@ import os
 import json
 import requests
 from dotenv import load_dotenv
-from flask import Flask, request, redirect, send_file
+from flask import Flask, request, jsonify, redirect, send_file, Response
 from flask_cors import CORS
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 from oauthlib.oauth2 import WebApplicationClient
@@ -64,7 +64,6 @@ class User(UserMixin):
     def get_user_by_id(id):
         user = db.users.find_one({"id": id})
         if user:
-            print(user)
             return User(user["id"], user["name"], user["email"], user["profile_pic"])
         return None
 
@@ -130,12 +129,15 @@ def callback():
         return "User email not available or not verified by Google.", 400
     # Create a user in your db with the information provided
     # by Google
+
+    exists = User.get_user_by_id(unique_id)
+
     user = User(
         id=unique_id, name=users_name, email=users_email, profile_pic=picture
     )
     
     # Doesn't exist? Add it to the database.
-    if not User.get_user_by_id(unique_id):
+    if not exists:
         print(vars(user))
         db.users.insert_one(vars(user))
     
@@ -154,10 +156,32 @@ def logout():
 
 
 @app.route("/api")
+@login_required
 def get_api():
-    if current_user.is_authenticated:
-        return "Campus Connect API v0.1.0 - Logged In!"
     return "Campus Connect API v0.1.0"
+
+
+@app.route("/api/profile", methods = ['GET', 'POST'])
+@login_required
+def get_profile_data():
+    if request.method == 'GET':
+        user_data = db.user_data.find_one({'id': current_user.id})
+        if not user_data:
+            return Response(status=404)
+        user_data.pop('_id')
+        return jsonify({'user': User.get_user_by_id(current_user.id).__dict__, 'user_data': user_data})
+    if request.method == 'POST':
+        data = request.get_json()
+        db.user_data.replace_one({'id': current_user.id}, {
+            'id': current_user.id,
+            'firstname': data['firstname'],
+            'lastname': data['lastname'],
+            'gender': data['gender'],
+            'age': data['age'],
+            'grade': data['grade'],
+            'major': data['major'],
+        }, upsert=True)
+        return Response(status=200)
 
 
 # redirect 404 errors to the index file to be handled by the client

@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import {
     Box,
     Container,
@@ -10,7 +9,8 @@ import {
 export default function Footer() {
     return (
         <Box
-            bg={useColorModeValue('gray.50', 'gray.900')}
+            height="60px"
+            bg={useColorModeValue('blue.200', 'gray.900')}
             color={useColorModeValue('gray.700', 'gray.200')}>
             <Container
                 as={Stack}
@@ -21,9 +21,7 @@ export default function Footer() {
                 justify={{ base: 'center', md: 'space-between' }}
                 align={{ base: 'center', md: 'center' }}>
                 <Text>© 2024 CampusConnect. All rights reserved</Text>
-                <Stack direction={'row'} spacing={6}>
-                    <Link to="/about">About Us</Link>
-                </Stack>
+                
             </Container>
         </Box>
     )

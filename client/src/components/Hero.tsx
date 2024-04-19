@@ -9,79 +9,46 @@ import {
     Heading,
     Stack,
     Text,
+    Center,
+    Spacer,
 } from "@chakra-ui/react"
 
-export default function Hero({
-    title = "Welcome to Campus-Connect",
-    subtitle = "Connect with people on your campus today.",
-    image = imgsrc,
-    ctaLink = "",
-    ctaText = "Test",
-    ...rest
-}) {
+export default function Hero() {
     return (
-        <Flex
-            align="center"
-            justify={{ base: "center", md: "space-around", xl: "space-between" }}
-            direction={{ base: "column-reverse", md: "row" }}
-            wrap="nowrap"
-            minH="70vh"
-            px={8}
-            mb={16}
-            {...rest}
-        >
-            <Stack
-                spacing={4}
-                w={{ base: "80%", md: "40%" }}
-                align={["center", "center", "flex-start", "flex-start"]}
-            >
-                <Heading
-                    as="h1"
-                    size="xl"
-                    fontWeight="bold"
-                    color="primary.800"
-                    textAlign={["center", "center", "left", "left"]}
-                >
-                    {title}
-                </Heading>
-                <Heading
-                    as="h2"
-                    size="md"
-                    color="primary.800"
-                    opacity="0.8"
-                    fontWeight="normal"
-                    lineHeight={1.5}
-                    textAlign={["center", "center", "left", "left"]}
-                >
-                    {subtitle}
-                </Heading>
-                <Link to={ctaLink}>
-                    <Button
-                        colorScheme="primary"
-                        borderRadius="8px"
-                        py="4"
-                        px="4"
-                        lineHeight="1"
-                        size="md"
-                    >
-                        {ctaText}
-                    </Button>
-                </Link>
-                {/* Below is commented out incase we want to add text here at some point */}
-                {/* <Text
-          fontSize="xs"
-          mt={2}
-          textAlign="center"
-          color="primary.800"
-          opacity="0.6"
-        >
-          
-        </Text> */}
-            </Stack>
-            <Box w={{ base: "70%", sm: "60%", md: "50%" }} mb={{ base: 12, md: 0 }}>
-                <Image src={image} sizes="90%" rounded="1rem" shadow="2xl" />
-            </Box>
-        </Flex>
+        <>
+            <Flex direction="column">
+                <Heading textAlign="center">Welcome to CampusConnect</Heading>
+                <Flex direction="row-reverse" flexWrap="wrap" justifyContent='center'>
+                        <Image src={imgsrc} maxWidth={'400px'} rounded="1rem" />
+                    <Flex direction="column" justifyContent='center'flexWrap='wrap'>
+                        <Text>
+
+                            Connect with people on your campus today.
+                        </Text>
+                        
+                        <Flex justifyContent={'center'}>
+                            <Button
+                                as={Link}
+                                size="md"
+                                bg={'blue.100'}
+                                to={loginURL}
+                            >
+                                Log In
+                            </Button>
+                            <Spacer width="14"/>
+                            <Button
+                                as={Link}
+                                size="md"
+                                bg={'blue.100'}
+                                to={loginURL}
+                            >
+                                Sign Up
+                            </Button>
+                        </Flex>
+                    </Flex>
+                </Flex>
+            </Flex>
+        </>
     )
 }
 
