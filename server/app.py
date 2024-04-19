@@ -2,7 +2,7 @@ import os
 import json
 import requests
 from dotenv import load_dotenv
-from flask import Flask, request, redirect, send_file
+from flask import Flask, request, jsonify, redirect, send_file
 from flask_cors import CORS
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 from oauthlib.oauth2 import WebApplicationClient
@@ -54,18 +54,18 @@ def load_user(user_id):
 # MODELS ------------------------------
 
 class User(UserMixin):
-    def __init__(self, id, name, email, profile_pic):
+    def __init__(self, id, name, email, profile_pic, new):
         self.id = id
         self.name = name
         self.email = email
         self.profile_pic = profile_pic
+        self.new = new
 
     @staticmethod
     def get_user_by_id(id):
         user = db.users.find_one({"id": id})
         if user:
-            print(user)
-            return User(user["id"], user["name"], user["email"], user["profile_pic"])
+            return User(user["id"], user["name"], user["email"], user["profile_pic"], user["new"])
         return None
 
 # ROUTES ------------------------------
@@ -130,12 +130,15 @@ def callback():
         return "User email not available or not verified by Google.", 400
     # Create a user in your db with the information provided
     # by Google
+
+    exists = User.get_user_by_id(unique_id)
+
     user = User(
-        id=unique_id, name=users_name, email=users_email, profile_pic=picture
+        id=unique_id, name=users_name, email=users_email, profile_pic=picture, new=bool(not exists)
     )
     
     # Doesn't exist? Add it to the database.
-    if not User.get_user_by_id(unique_id):
+    if not exists:
         print(vars(user))
         db.users.insert_one(vars(user))
     
@@ -154,10 +157,15 @@ def logout():
 
 
 @app.route("/api")
+@login_required
 def get_api():
-    if current_user.is_authenticated:
-        return "Campus Connect API v0.1.0 - Logged In!"
     return "Campus Connect API v0.1.0"
+
+
+@app.route("/api/profile")
+@login_required
+def get_profile_data():
+    return jsonify(User.get_user_by_id(current_user.id).__dict__)
 
 
 # redirect 404 errors to the index file to be handled by the client
