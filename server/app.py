@@ -170,8 +170,15 @@ def get_profile_data():
     if request.method == 'POST':
         data = request.get_json()
         print(request.get_json())
-        data['id'] = current_user.id
-        db.user_data.insert_one(vars(data))
+        db.user_data.insert_one({
+            'id': current_user.id,
+            'firstname': data['firstname'],
+            'lastname': data['lastname'],
+            'gender': data['gender'],
+            'age': data['age'],
+            'grade': data['grade'],
+            'major': data['major'],
+        })
         print(data)
         return Response(200)
 
