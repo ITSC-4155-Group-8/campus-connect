@@ -20,19 +20,8 @@ import { SearchIcon,
 
 export default function NavFooter() {
     return (
-        <Box
-            height="70px"
-            bg={useColorModeValue('blue.200', 'gray.900')}
-            color={useColorModeValue('gray.700', 'gray.200')}>
-            <Container
-                as={Stack}
-                maxW={'6xl'}
-                py={4}
-                direction={{ base: 'column', md: 'row' }}
-                spacing={4}
-                justify={{ base: 'center', md: 'space-between' }}
-                align={{ base: 'center', md: 'center' }}>
-                <Flex align="center" justify="center" h="100%" >
+                <Flex align="center" justify="center" h="100%" bg={useColorModeValue('blue.200', 'gray.900')}
+                width={"100%"} p={4} spacing={4}>
                     <IconButton aria-label='Search' icon={<SearchIcon />} />
                     <Spacer width="30px"/>
                     <IconButton
@@ -45,7 +34,6 @@ export default function NavFooter() {
                         icon={<SettingsIcon />}
                     />
                 </Flex>
-            </Container>
-        </Box>
+
     )
 }

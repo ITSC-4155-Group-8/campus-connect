@@ -5,6 +5,7 @@ import imgsrc from "./assets/logo.png"
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import NavFooter from "./components/NavFooter";
 import SplashPage from "./pages/SplashPage";
 import SignupPage from "./pages/SignupPage";
 
@@ -48,10 +49,13 @@ function App() {
         return (
             <>
                 <Header />
-                <Container style={{ height: "calc(100vh - 120px)" }} maxWidth="container.lg">
-                    {!state.loggedin ? <SplashPage /> : !state.user ? <SignupPage /> : <Outlet />}
+                <Container maxWidth="container.lg">
+                    {!state.loggedin ? <SplashPage /> : !state.user ? <SignupPage /> : <>
+                    <Outlet />
+                    <NavFooter/>
+                    </>}
                 </Container>
-                <Footer />
+                {(!state.loggedin || !state.user) ? <Footer/> : ""}
             </>
         );
     }

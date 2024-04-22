@@ -70,7 +70,9 @@ function SignupPage() {
 
     return (
         <>
+            <Spacer height={"20px"}/>
             <Heading justifyContent="center" size='sm'>Enter Information</Heading>
+            <Spacer height={"20px"}/>
             <Flex flexWrap="wrap">
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <FormControl isInvalid={Boolean(errors.firstname)}>
@@ -87,6 +89,7 @@ function SignupPage() {
                             {errors.firstname && errors.firstname.message}
                         </FormErrorMessage>
                     </FormControl>
+                    <Spacer height={"20px"}/>
 
                     <FormControl isInvalid={Boolean(errors.lastname)}>
                         <FormLabel htmlFor='lastname'>Last name</FormLabel>
@@ -102,6 +105,7 @@ function SignupPage() {
                             {errors.lastname && errors.lastname.message}
                         </FormErrorMessage>
                     </FormControl>
+                    <Spacer height={"20px"}/>
 
                     <FormControl isInvalid={Boolean(errors.gender)}>
                         <FormLabel htmlFor='gender'>Gender</FormLabel>
@@ -120,6 +124,7 @@ function SignupPage() {
                             {errors.gender && errors.gender.message}
                         </FormErrorMessage>
                     </FormControl>
+                    <Spacer height={"20px"}/>
 
                     <FormControl isInvalid={Boolean(errors.age)}>
                         <FormLabel htmlFor='age'>Age</FormLabel>
@@ -133,11 +138,13 @@ function SignupPage() {
                                 <NumberIncrementStepper />
                                 <NumberDecrementStepper />
                             </NumberInputStepper>
+                            
                         </NumberInput>
                         <FormErrorMessage>
                             {errors.age && errors.age.message}
                         </FormErrorMessage>
                     </FormControl>
+                    <Spacer height={"20px"}/>
 
                     <FormControl isInvalid={Boolean(errors.grade)}>
                         <FormLabel htmlFor='grade'>Grade Level</FormLabel>
@@ -157,12 +164,13 @@ function SignupPage() {
                             {errors.grade && errors.grade.message}
                         </FormErrorMessage>
                     </FormControl>
+                    <Spacer height={"20px"}/>
 
                     <FormControl isInvalid={Boolean(errors.major)}>
                         <FormLabel htmlFor='major'>Major</FormLabel>
                         <Input
                             id='major'
-                            placeholder='major'
+                            placeholder='Major'
                             {...register('major', {
                                 required: 'This is required',
                                 minLength: { value: 1, message: 'Minimum length should be 1' },
@@ -172,6 +180,7 @@ function SignupPage() {
                             {errors.major && errors.major.message}
                         </FormErrorMessage>
                     </FormControl>
+                    <Spacer height={"20px"}/>
 
                     <FormControl isInvalid={Boolean(errors.bio)}>
                         <FormLabel htmlFor='bio'>Bio</FormLabel>
@@ -187,6 +196,7 @@ function SignupPage() {
                             {errors.bio && errors.bio.message}
                         </FormErrorMessage>
                     </FormControl>
+                    <Spacer height={"20px"}/>
 
                     <FormControl isInvalid={Boolean(errors.bio)}>
                     <FormLabel htmlFor='likes'>Let others know what you like:</FormLabel>
@@ -202,6 +212,7 @@ function SignupPage() {
                             {errors.likes && errors.likes.message}
                         </FormErrorMessage>
                     </FormControl>
+                    <Spacer height={"20px"}/>
 
                     <FormControl isInvalid={Boolean(errors.bio)}>
                         <FormLabel htmlFor='dislikes'>Let others know what you DONT like:</FormLabel>
@@ -217,6 +228,7 @@ function SignupPage() {
                             {errors.dislikes && errors.dislikes.message}
                         </FormErrorMessage>
                     </FormControl>
+                    <Spacer height={"20px"}/>
 
                     <FormControl isInvalid={Boolean(errors.bio)}>
                         <FormLabel htmlFor='h_likes'>What do you NOT want others to know you like:</FormLabel>
@@ -232,6 +244,7 @@ function SignupPage() {
                             {errors.h_likes && errors.h_likes.message}
                         </FormErrorMessage>
                     </FormControl>
+                    <Spacer height={"20px"}/>
 
                     <FormControl isInvalid={Boolean(errors.bio)}>
                         <FormLabel htmlFor='h_dislikes'>What do you NOT want others to know you DONT like:</FormLabel>
@@ -247,12 +260,13 @@ function SignupPage() {
                             {errors.h_dislikes && errors.h_dislikes.message}
                         </FormErrorMessage>
                     </FormControl>
-
+                    <Spacer height={"20px"}/>
                     <Button mt={4} colorScheme='teal' isLoading={isSubmitting} type='submit'>
                         Submit
                     </Button>
                 </form>
             </Flex>
+            <Spacer height={"20px"}/>
         </>
     )
 }

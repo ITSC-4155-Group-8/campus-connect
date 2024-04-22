@@ -13,6 +13,8 @@ import {
     Spacer,
 } from "@chakra-ui/react"
 
+import Footer from './Footer'
+
 export default function Hero() {
     return (
         <>
@@ -48,6 +50,7 @@ export default function Hero() {
                     </Flex>
                 </Flex>
             </Flex>
+
         </>
     )
 }

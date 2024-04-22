@@ -12,19 +12,10 @@ export default function Footer() {
         <Flex
             justify="center" align="center" p={4}
             bg={useColorModeValue('blue.200', 'gray.900')}
-            color={useColorModeValue('gray.700', 'gray.200')}
+            width={"100%"}
+            flexDirection={'column'}
             >
-            <Container
-                as={Stack}
-                maxW={'6xl'}
-                py={4}
-                direction={{ base: 'column', md: 'row' }}
-                spacing={4}
-                justify={{ base: 'center', md: 'space-between' }}
-                align={{ base: 'center', md: 'center' }}>
                 <Text>© 2024 CampusConnect. All rights reserved</Text>
-                
-            </Container>
         </Flex>
     )
 }
