@@ -7,9 +7,11 @@ import {
     Heading,
     Divider,
     Box,
-    Text
+    Text,
+    Stack,
+    StackDivider
  } from '@chakra-ui/react'
-
+ import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react'
 function Matches() {
     return (
         <>
@@ -22,6 +24,9 @@ function Matches() {
                     Welcome, here are your matched users
                 </Text>  
             </Flex>
+
+
+            
         </>
     )
 }
