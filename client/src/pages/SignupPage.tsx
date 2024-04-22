@@ -12,7 +12,10 @@ import {
     NumberInputField,
     NumberInputStepper,
     NumberIncrementStepper,
-    NumberDecrementStepper
+    NumberDecrementStepper,
+    Textarea,
+    Text,
+    Spacer
 } from '@chakra-ui/react'
 
 enum GenderEnum {
@@ -36,7 +39,12 @@ type Inputs = {
     gender: GenderEnum,
     age: number,
     grade: GradeEnum,
-    major: string
+    major: string,
+    bio: string,
+    likes:string,
+    dislikes:string,
+    h_likes:string,
+    h_dislikes:string,
 }
 
 function SignupPage() {
@@ -69,7 +77,7 @@ function SignupPage() {
                         <FormLabel htmlFor='firstname'>First name</FormLabel>
                         <Input
                             id='firstname'
-                            placeholder='first name'
+                            placeholder='First name'
                             {...register('firstname', {
                                 required: 'This is required',
                                 minLength: { value: 1, message: 'Minimum length should be 1' },
@@ -84,7 +92,7 @@ function SignupPage() {
                         <FormLabel htmlFor='lastname'>Last name</FormLabel>
                         <Input
                             id='lastname'
-                            placeholder='last name'
+                            placeholder='Last name'
                             {...register('lastname', {
                                 required: 'This is required',
                                 minLength: { value: 1, message: 'Minimum length should be 1' },
@@ -162,6 +170,81 @@ function SignupPage() {
                         />
                         <FormErrorMessage>
                             {errors.major && errors.major.message}
+                        </FormErrorMessage>
+                    </FormControl>
+
+                    <FormControl isInvalid={Boolean(errors.bio)}>
+                        <FormLabel htmlFor='bio'>Bio</FormLabel>
+                        <Textarea
+                            placeholder='Enter bio Here'
+                            size='sm'
+                            {...register('bio', {
+                                required: 'This is required',
+                                minLength: { value: 1, message: 'Minimum length should be 1' },
+                            })}
+                        />
+                        <FormErrorMessage>
+                            {errors.bio && errors.bio.message}
+                        </FormErrorMessage>
+                    </FormControl>
+
+                    <FormControl isInvalid={Boolean(errors.bio)}>
+                    <FormLabel htmlFor='likes'>Let others know what you like:</FormLabel>
+                        <Textarea justifyContent={'center'}
+                            placeholder='Ex: Video Games, Fencing, Swimming, ect...'
+                            size='sm'
+                            {...register('likes', {
+                                required: 'This is required',
+                                minLength: { value: 1, message: 'Minimum length should be 1' },
+                            })}
+                        />
+                    <FormErrorMessage>
+                            {errors.likes && errors.likes.message}
+                        </FormErrorMessage>
+                    </FormControl>
+
+                    <FormControl isInvalid={Boolean(errors.bio)}>
+                        <FormLabel htmlFor='dislikes'>Let others know what you DONT like:</FormLabel>
+                        <Textarea justifyContent={'center'}
+                            placeholder='Ex: Spiders, People, Puppies, ect...'
+                            size='sm'
+                            {...register('dislikes', {
+                                required: 'This is required',
+                                minLength: { value: 1, message: 'Minimum length should be 1' },
+                            })}
+                        />
+                    <FormErrorMessage>
+                            {errors.dislikes && errors.dislikes.message}
+                        </FormErrorMessage>
+                    </FormControl>
+
+                    <FormControl isInvalid={Boolean(errors.bio)}>
+                        <FormLabel htmlFor='h_likes'>What do you NOT want others to know you like:</FormLabel>
+                        <Textarea justifyContent={'center'}
+                            placeholder='Ex: Sports, Trees, Cats, ect...'
+                            size='sm'
+                            {...register('h_likes', {
+                                required: 'This is required',
+                                minLength: { value: 1, message: 'Minimum length should be 1' },
+                            })}
+                        />
+                    <FormErrorMessage>
+                            {errors.h_likes && errors.h_likes.message}
+                        </FormErrorMessage>
+                    </FormControl>
+
+                    <FormControl isInvalid={Boolean(errors.bio)}>
+                        <FormLabel htmlFor='h_dislikes'>What do you NOT want others to know you DONT like:</FormLabel>
+                        <Textarea justifyContent={'center'}
+                            placeholder='Ex: Ocean, People, Puppies, ect...'
+                            size='sm'
+                            {...register('h_dislikes', {
+                                required: 'This is required',
+                                minLength: { value: 1, message: 'Minimum length should be 1' },
+                            })}
+                        />
+                        <FormErrorMessage>
+                            {errors.h_dislikes && errors.h_dislikes.message}
                         </FormErrorMessage>
                     </FormControl>
 
