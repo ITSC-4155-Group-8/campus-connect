@@ -45,7 +45,7 @@ client = OpenAI(api_key=os.getenv("OPENAI_KEY"))
 # verify connection to pinecone vectorized database
 
 # see https://docs.pinecone.io/v1/docs/quickstart namespaces
-pc_index = pc.Index("pc-campus-connect-db")
+pc_index = pc.Index(os.getenv("PINECONE_INDEX"))
 
 # connect to mongodb + collection + verify connection
 #mongodb = client_mongodb.get_database('campus_connect_db') # the part after dot is name of your db
@@ -508,7 +508,7 @@ def query_records(user, num):
   # returns vectors for user and puts into an array
   for tag in list_of_pinecone_tags:
       pinecone_result = pc_index.fetch([email], namespace=tag)
-      #print(pinecone_result)
+      # print(pinecone_result)
       # pinecone_result returns an object, this is the parsed version only getting the vectors
       user_vectors.append(pinecone_result['vectors'][email]['values'])
       # note this is cheesed a bit here sloppy code
