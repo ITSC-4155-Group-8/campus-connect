@@ -1,60 +1,25 @@
-#vectorized db imports
-from pinecone import Pinecone
-from pinecone import ServerlessSpec
-from pinecone import PodSpec
 import os
-
 from dotenv import load_dotenv
 load_dotenv()
 
 # import regular expressions
 import re
-
 # objectID for mongodb
 from bson import ObjectId
-
 # import JSON for formatting
 import json
-
 # import datetime
 import datetime
-
-# match case
-from ast import match_case
-
-# imports time
-import time
-
-
 # openAI imports
 from openai import OpenAI
 
-# import json
-import json
-
 from src.db import db
-
-pc = Pinecone(api_key=os.getenv("PINECONE_KEY"))
+from src.pinecone import pc_index
 
 client = OpenAI(api_key=os.getenv("OPENAI_KEY"))
 
-# connecting to mongo db
-#connection_string = "mongodb+srv://test:<test@itsc4155.okxsgq3.mongodb.net/"
-#client_mongodb = MongoClient(connection_string, username='test', password='test')
-
-# verify connection to pinecone vectorized database
-
-# see https://docs.pinecone.io/v1/docs/quickstart namespaces
-pc_index = pc.Index(os.getenv("PINECONE_INDEX"))
-
-# connect to mongodb + collection + verify connection
-#mongodb = client_mongodb.get_database('campus_connect_db') # the part after dot is name of your db
-mongodb = db
-#mongodb_records = mongodb.campus_connect_records
 mongodb_records = db.user_data
-
-# connect to mongodb match records
-mongodb_record_matches = mongodb.campus_connect_match_records
+mongodb_record_matches = db.matches
 
 # vectorization model
 MODEL = "text-embedding-3-small"

@@ -49,3 +49,38 @@ def get_profile_data():
 #        db.user_data.replace_one({ 'email': User.get_user_by_id(current_user.id).__dict__['email'] }, user_doc, upsert=True)
         create_record(user_doc)
         return Response(status=200)
+
+
+@api_routes.route("/api/matches", methods = [ 'GET' ])
+@login_required
+def get_matches():
+    user_data = db.user_data.find_one({'email': User.get_user_by_id(current_user.id).__dict__['email']})
+    if not user_data:
+        return Response(status=500)
+    return jsonify(user_data['match_queue'])
+
+
+@api_routes.route("/api/matches/<match_id>", methods = [ 'GET' ])
+@login_required
+def get_match_data(match_id=None):
+    if not match_id:
+        return Response(status=404)
+    
+    user_data = db.user_data.find_one({'email': User.get_user_by_id(current_user.id).__dict__['email']})
+    if not user_data:
+        return Response(status=500)
+
+    return jsonify({})
+
+
+@api_routes.route("/api/users/<user_id>", methods = [ 'GET' ])
+@login_required
+def get_user_data(user_id=None):
+    if not user_id:
+        return Response(status=404)
+    
+    user_data = db.user_data.find_one({'email': User.get_user_by_id(current_user.id).__dict__['email']})
+    if not user_data:
+        return Response(status=500)
+    
+    return jsonify({})
