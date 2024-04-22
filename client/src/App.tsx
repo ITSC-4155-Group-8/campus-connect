@@ -8,6 +8,7 @@ import Footer from "./components/Footer";
 import SplashPage from "./pages/SplashPage";
 import SignupPage from "./pages/SignupPage";
 import MainPage from "./pages/MainPage";
+import MatchesPage from "./pages/MatchesPage";
 
 function App() {
     const [state, setState] = useState({
