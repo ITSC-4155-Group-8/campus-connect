@@ -6,25 +6,36 @@ import os
 
 # import regular expressions
 import re
+
 # objectID for mongodb
 from bson import ObjectId
+
 # import JSON for formatting
 import json
+
 # import datetime
 import datetime
+
 # match case
 from ast import match_case
+
+# imports time
+import time
+
 # mongodb imports
 import pymongo
+
 from pymongo import MongoClient
+
 # openAI imports
 from openai import OpenAI
+
 # import json
 import json
 
 # api key for vectorized db
 pc = Pinecone(api_key='59f47e61-ea2e-43fa-945c-432d3e67f190')
-#change
+
 # connecting to mongo db
 connection_string = "mongodb+srv://test:<test@itsc4155.okxsgq3.mongodb.net/"
 client_mongodb = MongoClient(connection_string, username='test', password='test')
@@ -47,7 +58,6 @@ client = OpenAI( # please don't share this key it charges to my account
 )
 # vectorization model
 MODEL = "text-embedding-3-small"
-
 
 # Function Name --- data_to_embed
 # Description
@@ -81,10 +91,6 @@ def data_to_embed(embed_list):
 #example_test_embed = ['testing', 'testing 2', 'testing 3', 'testing 4']
 #embedded_list = data_to_embed(example_test_embed)
 #print(embedded_list)
-
-
-
-
 
 # Function Name --- insert_user_into_pinecone_db
 # Description
@@ -136,13 +142,7 @@ def insert_user_into_pinecone_db(mongodb_user, inserted_id, embedded_list, list_
     #print('sucess')
   #print('all values vectorized :)')
 
-
-
-
-
-
-
-# Function Name --- augment_data
+  # Function Name --- augment_data
 # Description
 '''
 A helper function that organizes data correctly for the other functions in the create_record
@@ -186,8 +186,6 @@ def augment_data(insert_result, mongodb_user):
   list_of_pinecone_tags = ['bio', 'user_likes', 'user_dislikes', 'hidden_likes', 'hidden_dislikes']
 
   return inserted_id, list_of_data_to_embed, list_of_pinecone_tags
-
-
 
 # Function Name --- create_mongo_db_user
 # Description
@@ -251,8 +249,6 @@ def create_mongo_db_user(user):
   return mongodb_user
 
 
-
-
 # Function Name --- create_record
 # Description
 '''
@@ -293,9 +289,8 @@ def create_record(user):
   # add vectorized values to pinecone_db
   insert_user_into_pinecone_db(mongodb_user, inserted_id, embedded_list, list_of_pinecone_tags)
   #print('sucessfly created record in both data bases :)')
+
   return True
-
-
 
 def update_record(user):
 
@@ -332,11 +327,6 @@ def update_record(user):
   # add vectorized values to pinecone_db
   insert_user_into_pinecone_db(mongodb_user, inserted_id, embedded_list, list_of_pinecone_tags)
   #print('sucessfly update record in both data bases :)')
-
-
-
-
-
 
 
 # given a match id delete that match from the matched_user profile.
@@ -411,23 +401,6 @@ def delete_match(_id, debug=False):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def delete_record(user, debug=False):
   # parse user json into a dictionary
   mongodb_user = create_mongo_db_user(user)
@@ -477,16 +450,12 @@ def delete_record(user, debug=False):
   #update the mongodb
   if debug:
     print('deleting user from mongodb')
+
   filter_criteria = {"email": mongodb_user['email']}
+
   mongodb_records.delete_one(filter_criteria)
 
-
-
-
-
-
-
-
+  return True
 
 def sort_similar_users(data):
     sorted_data = []
@@ -508,14 +477,6 @@ def sort_similar_users(data):
     sorted_data = sorted(sorted_data, key=lambda x: x['score'], reverse=True)
     #print(sorted_data)
     return sorted_data
-
-
-
-
-
-
-
-
 
 # finds compatible people and returns a result of people with an openAI explanation of why they are compatible
 #
@@ -567,7 +528,7 @@ def query_records(user, num):
       namespace=tag,
       vector=user_vectors[i],
       filter=filters,
-      top_k=num,
+      top_k=num, # this returns the most similar people from each vector
       include_values=False, # optional
       include_metadata=True
     )
@@ -678,14 +639,6 @@ def query_records(user, num):
   # now that the documents have been returned do a chat gpt call to write if these two people would be compatible friends
 
 
-
-
-
-
-
-
-
-
 def create_matches(matches):
 
   match_ids = []
@@ -697,11 +650,6 @@ def create_matches(matches):
     match_ids.append(str(insert_id))
 
   return match_ids
-
-
-
-
-
 
 def generate_matches(user, num):
 
@@ -723,6 +671,19 @@ def generate_matches(user, num):
   mongodb_records.update_one(filter_criteria, update_values)
 
 
+  '''
+  {'_id': ObjectId('662677c43a90203840c8bb21'),
+  'compatibility_description': "text here",
+   'compatibility_score': '8',
+   'match_name': 'David',
+   'match_id': '662677973a90203840c8bb18',
+   'match_email': 'dlee@uncc.edu',
+   'match_owner_email': 'ejohnson@uncc.edu',
+   'match_datetime': '2024-04-22T14:44:09.515190',
+   'chat_text': [],
+   'owner_wants_match': False,
+   'match_wants_match': False}
+  '''
   for match_u in create_match_ids:
     # add records to the matched persons queue
     filter_criteria = {"_id" : ObjectId(match_u)}
@@ -730,26 +691,20 @@ def generate_matches(user, num):
     print(matched_user)
     email = matched_user['match_email']
     match_id = matched_user['match_id']
+
+    #new code
+    matched_user = get_user_profile(email)
+    matched_user['match_queue'].append(match_u)
+
     #update the mongodb matched user
     filter_criteria = {"_id" : ObjectId(match_id)}
     update_values = {
           "$set": {
-          "match_queue" : create_match_ids
+          "match_queue" : matched_user['match_queue'] # match queue is a list how do I append to it
           # Add more fields and values to update as needed
       }
     }
     mongodb_records.update_one(filter_criteria, update_values)
-
-  # add logic to create match record add record id to user maches list
-  # since a match is strictly stored in mongoDB create seperate functions
-  # then do data to update a match
-  # then do data to delete a match
-
-
-
-
-
-
 
 
 def user_wants_to_match(user, match_queue_id):
@@ -848,12 +803,7 @@ def user_wants_to_match(user, match_queue_id):
         mongodb_records.update_one(filter_criteria, update_values)
         #print('user updated')
 
-
-
-
-
-
-def get_user_profile(email):
+def get_user_profile(email, debug = False):
 
   filter_criteria = {"email" : email}
   matched_object = mongodb_records.find_one(filter_criteria)
@@ -876,10 +826,31 @@ def get_user_profile(email):
         "matches" : matched_object['matches'],
         "match_queue" : matched_object['match_queue']
     }
-  print(mongodb_user)
-  return mongodb_user
+  if debug:
+    return mongodb_user, True
+  else:
+    #print(mongodb_user)
+    return mongodb_user
+  
+def get_matched_object(match_id):
 
+  filter_criteria = {"_id" : ObjectId(match_id)}
+  matched_object = mongodb_record_matches.find_one(filter_criteria)
 
+  matched_object = {
+    "match_name" : matched_object["match_name"],
+    "match_email" : matched_object["match_email"],
+    "match_id" : matched_object["match_id"],
+    "match_owner_email" : matched_object["match_owner_email"],
+    "match_datetime" : matched_object["match_datetime"],
+    "compatibility_score" : matched_object["compatibility_score"],
+    "compatibility_description" : matched_object["compatibility_description"],
+    "chat_text" : matched_object["chat_text"], # [chat_object]
+    "owner_wants_match": matched_object["owner_wants_match"],
+    "match_wants_match": matched_object["match_wants_match"]
+  }
+
+  return matched_object
 
 def send_match_text(user, match_id, message_string):
 
@@ -906,12 +877,6 @@ def send_match_text(user, match_id, message_string):
         }
     }
   mongodb_record_matches.update_one(filter_criteria, update_values)
-
-
-
-
-
-
 
 def delete_match_text(user, match_id, msg_datetime, message_string):
 
