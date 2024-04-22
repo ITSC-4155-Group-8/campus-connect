@@ -1,19 +1,21 @@
-import { Card, CardHeader, CardBody, CardFooter, Heading, Text, Box, Stack, StackDivider } from '@chakra-ui/react'
+import { Card, CardHeader, CardBody, CardFooter, Heading, Text, Box, Stack, useColorModeValue, StackDivider } from '@chakra-ui/react'
 
-export default function UserCard() {
+export default function UserCard(props) {
+    const user = props.user;
     return (
-            <Card>
+            <Card
+            backgroundColor={useColorModeValue('blue.200', 'gray.800')}>
                 <CardHeader>
-                    <Heading size='md'>user.first user.last</Heading>
+                    <Heading size='md'>{user.first_name} {user.last_name}</Heading>
                 </CardHeader>
                 <CardBody>
-                    <Stack divider={<StackDivider />} spacing='4'>
+                    <Stack divider={<StackDivider />} spacing='2'>
                         <Box>
                             <Heading size='xs' textTransform='uppercase'>
                                 School Year
                             </Heading>
                             <Text pt='2' fontSize='sm'>
-                                user.year
+                                {user.year}
                             </Text>
                         </Box>
                         <Box>
@@ -21,7 +23,7 @@ export default function UserCard() {
                                 Major
                             </Heading>
                             <Text pt='2' fontSize='sm'>
-                                user.major
+                                {user.major}
                             </Text>
                         </Box>
                         <Box>
@@ -29,7 +31,7 @@ export default function UserCard() {
                                 Email
                             </Heading>
                             <Text pt='2' fontSize='sm'>
-                                user.email
+                                {user.email}
                             </Text>
                         </Box>
                     </Stack>

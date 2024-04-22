@@ -10,6 +10,7 @@ import theme from './theme';
 import App from './App.tsx'
 
 import HomePage from './pages/HomePage';
+import MatchesPage from './pages/MatchesPage';
 
 const router = createBrowserRouter([
     {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
                 path: "",
                 element: <HomePage />,
             },
+            {
+                path: "matches",
+                element: <MatchesPage/>
+            }
         ],
     },
 ]);

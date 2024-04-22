@@ -11,8 +11,8 @@ import {
     Stack,
     StackDivider
  } from '@chakra-ui/react'
- import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react'
-function Matches() {
+ import UserCard from '../components/UserCard';
+function MatchesPage() {
     return (
         <>
             <Flex
@@ -21,14 +21,20 @@ function Matches() {
             direction={'column'}>
                 <Text
                 fontSize='30px'>
-                    Welcome, here are your matched users
+                    Users You Matched With:
                 </Text>  
             </Flex>
 
+            <UserCard user={{
+                first_name: "Andrew",
+                last_name: "Bertlshofer",
+                year: "Senior",
+                major: "CS",
+                email: "abertlsh@uncc.edu"
+            }}/>
 
-            
         </>
     )
 }
 
-export default Matches;
+export default MatchesPage;
