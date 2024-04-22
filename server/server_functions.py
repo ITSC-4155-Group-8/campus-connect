@@ -4,6 +4,9 @@ from pinecone import ServerlessSpec
 from pinecone import PodSpec
 import os
 
+from dotenv import load_dotenv
+load_dotenv()
+
 # import regular expressions
 import re
 
@@ -33,8 +36,9 @@ from openai import OpenAI
 # import json
 import json
 
-# api key for vectorized db
-pc = Pinecone(api_key='59f47e61-ea2e-43fa-945c-432d3e67f190')
+pc = Pinecone(api_key=os.getenv("PINECONE_KEY"))
+
+client = OpenAI(api_key=os.getenv("OPENAI_KEY"))
 
 # connecting to mongo db
 connection_string = "mongodb+srv://test:<test@itsc4155.okxsgq3.mongodb.net/"
@@ -52,10 +56,6 @@ mongodb_records = mongodb.campus_connect_records
 # connect to mongodb match records
 mongodb_record_matches = mongodb.campus_connect_match_records
 
-# api key for openAI
-client = OpenAI( # please don't share this key it charges to my account
-    api_key="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"
-)
 # vectorization model
 MODEL = "text-embedding-3-small"
 

@@ -1,6 +1,10 @@
 import os
+import re
 import json
+import time
 import requests
+import datetime
+from openai import OpenAI
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify, redirect, send_file, Response
 from flask_cors import CORS
@@ -10,7 +14,21 @@ from oauthlib.oauth2 import WebApplicationClient
 from flask_pymongo import PyMongo
 from flask_login import UserMixin
 
+# vectorized db imports
+from pinecone import Pinecone
+from pinecone import ServerlessSpec
+from pinecone import PodSpec
+
 load_dotenv()
+
+pc = Pinecone(api_key=os.getenv("PINECONE_KEY"))
+# see https://docs.pinecone.io/v1/docs/quickstart namespaces
+pc_index = pc.Index("pc-campus-connect-db")
+
+openai_client = OpenAI(api_key=os.getenv("OPENAI_KEY"))
+
+# vectorization model
+MODEL = "text-embedding-3-small"
 
 MONGO_URI = os.getenv("MONGO_URI")
 
@@ -41,7 +59,7 @@ login_manager.init_app(app)
 app.config['SESSION_COOKIE_SECURE'] = True
 
 # OAuth 2 client setup
-client = WebApplicationClient(GOOGLE_CLIENT_ID)
+oauth_client = WebApplicationClient(GOOGLE_CLIENT_ID)
 
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
@@ -77,7 +95,7 @@ def login():
 
     # Use library to construct the request for Google login and provide
     # scopes that let you retrieve user's profile from Google
-    request_uri = client.prepare_request_uri(
+    request_uri = oauth_client.prepare_request_uri(
         authorization_endpoint,
         redirect_uri=request.base_url + "/callback",
         scope=["openid", "email", "profile"],
@@ -94,7 +112,7 @@ def callback():
     google_provider_cfg = get_google_provider_cfg()
     token_endpoint = google_provider_cfg["token_endpoint"]
     # Prepare and send a request to get tokens! Yay tokens!
-    token_url, headers, body = client.prepare_token_request(
+    token_url, headers, body = oauth_client.prepare_token_request(
         token_endpoint,
         authorization_response=request.url,
         redirect_url=request.base_url,
@@ -108,13 +126,13 @@ def callback():
     )
 
     # Parse the tokens!
-    client.parse_request_body_response(json.dumps(token_response.json()))
+    oauth_client.parse_request_body_response(json.dumps(token_response.json()))
 
     # Now that you have tokens (yay) let's find and hit the URL
     # from Google that gives you the user's profile information,
     # including their Google profile image and email
     userinfo_endpoint = google_provider_cfg["userinfo_endpoint"]
-    uri, headers, body = client.add_token(userinfo_endpoint)
+    uri, headers, body = oauth_client.add_token(userinfo_endpoint)
     userinfo_response = requests.get(uri, headers=headers, data=body)
 
     # You want to make sure their email is verified.
@@ -165,23 +183,34 @@ def get_api():
 @login_required
 def get_profile_data():
     if request.method == 'GET':
-        user_data = db.user_data.find_one({'id': current_user.id})
+        user_data = db.user_data.find_one({'email': User.get_user_by_id(current_user.id).__dict__['email']})
         if not user_data:
             return Response(status=404)
         user_data.pop('_id')
         return jsonify({'user': User.get_user_by_id(current_user.id).__dict__, 'user_data': user_data})
     if request.method == 'POST':
         data = request.get_json()
-        db.user_data.replace_one({'id': current_user.id}, {
-            'id': current_user.id,
-            'firstname': data['firstname'],
-            'lastname': data['lastname'],
+        db.user_data.replace_one({ 'email': User.get_user_by_id(current_user.id).__dict__['email'] }, {
+            'first_name': data['first_name'],
+            'last_name': data['last_name'],
+            'email': User.get_user_by_id(current_user.id).__dict__['email'],
             'gender': data['gender'],
             'age': data['age'],
-            'grade': data['grade'],
+            'school_year': data['school_year'],
             'major': data['major'],
+            'minor': data['minor'],
+            'user_datetime_created': datetime.datetime.now().isoformat(),
+            'user_likes': data['likes'],
+            'user_dislikes': data['dislikes'],
+            'hidden_likes': data['h_likes'],
+            'hidden_dislikes': data['h_dislikes'],
+            'matches': [],
+            'match_queue': [],
+            'bio': data['bio']
         }, upsert=True)
         return Response(status=200)
+    
+    #login , check if user login email exists in 
 
 
 # redirect 404 errors to the index file to be handled by the client
