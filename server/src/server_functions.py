@@ -25,10 +25,6 @@ from ast import match_case
 # imports time
 import time
 
-# mongodb imports
-import pymongo
-
-from pymongo import MongoClient
 
 # openAI imports
 from openai import OpenAI
@@ -36,13 +32,15 @@ from openai import OpenAI
 # import json
 import json
 
+from src.db import db
+
 pc = Pinecone(api_key=os.getenv("PINECONE_KEY"))
 
 client = OpenAI(api_key=os.getenv("OPENAI_KEY"))
 
 # connecting to mongo db
-connection_string = "mongodb+srv://test:<test@itsc4155.okxsgq3.mongodb.net/"
-client_mongodb = MongoClient(connection_string, username='test', password='test')
+#connection_string = "mongodb+srv://test:<test@itsc4155.okxsgq3.mongodb.net/"
+#client_mongodb = MongoClient(connection_string, username='test', password='test')
 
 # verify connection to pinecone vectorized database
 
@@ -50,8 +48,10 @@ client_mongodb = MongoClient(connection_string, username='test', password='test'
 pc_index = pc.Index("pc-campus-connect-db")
 
 # connect to mongodb + collection + verify connection
-mongodb = client_mongodb.get_database('campus_connect_db') # the part after dot is name of your db
-mongodb_records = mongodb.campus_connect_records
+#mongodb = client_mongodb.get_database('campus_connect_db') # the part after dot is name of your db
+mongodb = db
+#mongodb_records = mongodb.campus_connect_records
+mongodb_records = db.user_data
 
 # connect to mongodb match records
 mongodb_record_matches = mongodb.campus_connect_match_records
@@ -279,6 +279,7 @@ def create_record(user):
   mongodb_user = create_mongo_db_user(user)
   # add user to mongodb
   insert_result = mongodb_records.insert_one(mongodb_user)
+#  insert_result = mongodb_records.replace_one({ 'email': user['email'] }, user, upsert=True)
   #print(insert_result.inserted_id)
   insert_id = insert_result.inserted_id
 

@@ -1,223 +1,56 @@
 import os
-import re
-import json
-import time
-import requests
-import datetime
+
 from openai import OpenAI
-from dotenv import load_dotenv
-from flask import Flask, request, jsonify, redirect, send_file, Response
-from flask_cors import CORS
-from flask_login import LoginManager, current_user, login_required, login_user, logout_user
-from oauthlib.oauth2 import WebApplicationClient
-
-from flask_pymongo import PyMongo
-from flask_login import UserMixin
-
-# vectorized db imports
 from pinecone import Pinecone
-from pinecone import ServerlessSpec
-from pinecone import PodSpec
+
+from dotenv import load_dotenv
+
+from flask import Flask, redirect
+from flask_cors import CORS
+from flask_login import LoginManager, current_user
+
+from src.user import User
 
 load_dotenv()
 
-pc = Pinecone(api_key=os.getenv("PINECONE_KEY"))
-# see https://docs.pinecone.io/v1/docs/quickstart namespaces
-pc_index = pc.Index("pc-campus-connect-db")
-
-openai_client = OpenAI(api_key=os.getenv("OPENAI_KEY"))
-
-# vectorization model
-MODEL = "text-embedding-3-small"
-
-MONGO_URI = os.getenv("MONGO_URI")
-
-# frontend url for login redirect
+# frontend url
 URL = os.getenv("URL")
-
-# https://realpython.com/flask-google-login/
-SECRET_KEY = os.getenv("SECRET_KEY")
-GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
-GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
-GOOGLE_DISCOVERY_URL = "https://accounts.google.com/.well-known/openid-configuration"
 
 # serve static files at the server route
 app = Flask(__name__, static_url_path="", static_folder="static")
-# database setup
-app.config["MONGO_URI"] = MONGO_URI
+
 # secret key for built in https
+SECRET_KEY = os.getenv("SECRET_KEY")
 app.secret_key = SECRET_KEY or os.urandom(24)
-db = PyMongo(app).db
+
 # enable CORS
 CORS(app, supports_credentials=True)
+
+# require https for session cookies
+app.config['SESSION_COOKIE_SECURE'] = True
 
 # User session management setup
 # https://flask-login.readthedocs.io/en/latest
 login_manager = LoginManager()
 login_manager.init_app(app)
-# require https for session cookies
-app.config['SESSION_COOKIE_SECURE'] = True
-
-# OAuth 2 client setup
-oauth_client = WebApplicationClient(GOOGLE_CLIENT_ID)
-
-def get_google_provider_cfg():
-    return requests.get(GOOGLE_DISCOVERY_URL).json()
 
 # Flask-Login helper to retrieve a user from our db
 @login_manager.user_loader
 def load_user(user_id):
     return User.get_user_by_id(user_id)
 
-# MODELS ------------------------------
+# ROUTES -------------------------------
 
-class User(UserMixin):
-    def __init__(self, id, name, email, profile_pic):
-        self.id = id
-        self.name = name
-        self.email = email
-        self.profile_pic = profile_pic
+from routes.login import login_routes
+app.register_blueprint(login_routes)
 
-    @staticmethod
-    def get_user_by_id(id):
-        user = db.users.find_one({"id": id})
-        if user:
-            return User(user["id"], user["name"], user["email"], user["profile_pic"])
-        return None
-
-# ROUTES ------------------------------
-
-@app.route("/login")
-def login():
-    # Find out what URL to hit for Google login
-    google_provider_cfg = get_google_provider_cfg()
-    authorization_endpoint = google_provider_cfg["authorization_endpoint"]
-
-    # Use library to construct the request for Google login and provide
-    # scopes that let you retrieve user's profile from Google
-    request_uri = oauth_client.prepare_request_uri(
-        authorization_endpoint,
-        redirect_uri=request.base_url + "/callback",
-        scope=["openid", "email", "profile"],
-    )
-    return redirect(request_uri)
-
-
-@app.route("/login/callback")
-def callback():
-    # Get authorization code Google sent back to you
-    code = request.args.get("code")
-    # Find out what URL to hit to get tokens that allow you to ask for
-    # things on behalf of a user
-    google_provider_cfg = get_google_provider_cfg()
-    token_endpoint = google_provider_cfg["token_endpoint"]
-    # Prepare and send a request to get tokens! Yay tokens!
-    token_url, headers, body = oauth_client.prepare_token_request(
-        token_endpoint,
-        authorization_response=request.url,
-        redirect_url=request.base_url,
-        code=code
-    )
-    token_response = requests.post(
-        token_url,
-        headers=headers,
-        data=body,
-        auth=(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET),
-    )
-
-    # Parse the tokens!
-    oauth_client.parse_request_body_response(json.dumps(token_response.json()))
-
-    # Now that you have tokens (yay) let's find and hit the URL
-    # from Google that gives you the user's profile information,
-    # including their Google profile image and email
-    userinfo_endpoint = google_provider_cfg["userinfo_endpoint"]
-    uri, headers, body = oauth_client.add_token(userinfo_endpoint)
-    userinfo_response = requests.get(uri, headers=headers, data=body)
-
-    # You want to make sure their email is verified.
-    # The user authenticated with Google, authorized your
-    # app, and now you've verified their email through Google!
-    if userinfo_response.json().get("email_verified"):
-        unique_id = userinfo_response.json()["sub"]
-        users_email = userinfo_response.json()["email"]
-        picture = userinfo_response.json()["picture"]
-        users_name = userinfo_response.json()["given_name"]
-    else:
-        return "User email not available or not verified by Google.", 400
-    # Create a user in your db with the information provided
-    # by Google
-
-    exists = User.get_user_by_id(unique_id)
-
-    user = User(
-        id=unique_id, name=users_name, email=users_email, profile_pic=picture
-    )
-    
-    # Doesn't exist? Add it to the database.
-    if not exists:
-        print(vars(user))
-        db.users.insert_one(vars(user))
-    
-    # Begin user session by logging the user in
-    login_user(user)
-    
-    # Send user back to homepage
-    return redirect(URL)
-
-
-@app.route("/logout")
-@login_required
-def logout():
-    logout_user()
-    return redirect("/api")
-
-
-@app.route("/api")
-@login_required
-def get_api():
-    return "Campus Connect API v0.1.0"
-
-
-@app.route("/api/profile", methods = ['GET', 'POST'])
-@login_required
-def get_profile_data():
-    if request.method == 'GET':
-        user_data = db.user_data.find_one({'email': User.get_user_by_id(current_user.id).__dict__['email']})
-        if not user_data:
-            return Response(status=404)
-        user_data.pop('_id')
-        return jsonify({'user': User.get_user_by_id(current_user.id).__dict__, 'user_data': user_data})
-    if request.method == 'POST':
-        data = request.get_json()
-        db.user_data.replace_one({ 'email': User.get_user_by_id(current_user.id).__dict__['email'] }, {
-            'first_name': data['first_name'],
-            'last_name': data['last_name'],
-            'email': User.get_user_by_id(current_user.id).__dict__['email'],
-            'gender': data['gender'],
-            'age': data['age'],
-            'school_year': data['school_year'],
-            'major': data['major'],
-            'minor': data['minor'],
-            'user_datetime_created': datetime.datetime.now().isoformat(),
-            'user_likes': data['likes'],
-            'user_dislikes': data['dislikes'],
-            'hidden_likes': data['h_likes'],
-            'hidden_dislikes': data['h_dislikes'],
-            'matches': [],
-            'match_queue': [],
-            'bio': data['bio']
-        }, upsert=True)
-        return Response(status=200)
-    
-    #login , check if user login email exists in 
-
+from routes.api import api_routes
+app.register_blueprint(api_routes)
 
 # redirect 404 errors to the index file to be handled by the client
 @app.errorhandler(404)
 def page_not_found(e):
     return redirect(URL)
-#    return send_file("static/index.html"), 200
 
 # -------------------------------------
 
