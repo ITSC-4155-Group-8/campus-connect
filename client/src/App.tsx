@@ -7,6 +7,8 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import SplashPage from "./pages/SplashPage";
 import SignupPage from "./pages/SignupPage";
+import MainPage from "./pages/MainPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
     const [state, setState] = useState({
@@ -49,7 +51,7 @@ function App() {
             <>
                 <Header />
                 <Container style={{ height: "calc(100vh - 120px)" }} maxWidth="container.lg">
-                    {!state.loggedin ? <SplashPage /> : !state.user ? <SignupPage /> : <Outlet />}
+                    {!state.loggedin ? <SplashPage /> : !state.user ? <ProfilePage /> : <Outlet />}
                 </Container>
                 <Footer />
             </>
