@@ -3,36 +3,28 @@ import { useState } from 'react';
 import { 
     Input,
     Flex,
-    Select,
-    Spacer,
-    Button, 
-    Heading,
-    Divider,
-    Box,
     Text,
-    Stack,
-    StackDivider
  } from '@chakra-ui/react'
  import UserCard from '../components/UserCard';
 function MatchesPage() {
     const [ state, setState ] = useState([
         {
-            first_name: "Andrew",
-            last_name: "Bertlshofer",
+            name: "Andrew Bertlshofer",
+            year: "Senior",
+            major: "CS",
+            email: "abertlsh@uncc.edu",
+            compatibility_score: "100",
+            compatibility_description: "big amount of text",
+            
+        },
+        {
+            name: "Andrew Bertlshofer",
             year: "Senior",
             major: "CS",
             email: "abertlsh@uncc.edu"
         },
         {
-            first_name: "Andrew",
-            last_name: "Bertlshofer",
-            year: "Senior",
-            major: "CS",
-            email: "abertlsh@uncc.edu"
-        },
-        {
-            first_name: "Andrew",
-            last_name: "Bertlshofer",
+            name: "Andrew Bertlshofer",
             year: "Senior",
             major: "CS",
             email: "abertlsh@uncc.edu"

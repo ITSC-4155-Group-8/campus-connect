@@ -154,6 +154,15 @@ def logout():
     logout_user()
     return redirect("/api")
 
+# app route matches (user)
+# going to call get user
+# make a for loop for the matches and match queue 
+# [48575765, 474767657, 475756765]
+# empty dic = []
+# for i in list(enum)
+# match obj = getmatch(i)
+# emptydic.append(matchobj)
+#return user, emptydic
 
 @app.route("/api")
 @login_required
