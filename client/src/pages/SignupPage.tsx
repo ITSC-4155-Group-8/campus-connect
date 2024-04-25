@@ -14,7 +14,6 @@ import {
     NumberIncrementStepper,
     NumberDecrementStepper,
     Textarea,
-    Text,
     Spacer
 } from '@chakra-ui/react'
 

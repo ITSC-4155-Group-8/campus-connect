@@ -1,15 +1,8 @@
-import { Link } from 'react-router-dom'
-
 import {
-    Box,
-    Container,
-    Stack,
-    Text,
     useColorModeValue,
-    Icon,
     IconButton,
     Flex,
-    Spacer
+    Spacer,
 } from '@chakra-ui/react'
 import { SearchIcon,
         EmailIcon,
@@ -21,7 +14,7 @@ import { SearchIcon,
 export default function NavFooter() {
     return (
                 <Flex align="center" justify="center" h="100%" bg={useColorModeValue('blue.200', 'gray.900')}
-                width={"100%"} p={4} spacing={4}>
+                width={"100%"} p={4}>
                     <IconButton aria-label='Search' icon={<SearchIcon />} />
                     <Spacer width="30px"/>
                     <IconButton

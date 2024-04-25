@@ -1,18 +1,10 @@
-import { Link } from "react-router-dom";
 import imgsrc from "../assets/logo.png"
 import {
     Box,
     Flex,
-    Text,
-    IconButton,
     Image,
-    Stack,
-    Collapse,
     useColorModeValue,
-    useBreakpointValue,
-    useDisclosure,
 } from '@chakra-ui/react'
-import { HamburgerIcon } from '@chakra-ui/icons'
 
 export default function Header() {
 
