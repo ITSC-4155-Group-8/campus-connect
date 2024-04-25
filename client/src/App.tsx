@@ -51,7 +51,7 @@ function App() {
             <>
                 <Header />
                 <Container style={{ height: "calc(100vh - 120px)" }} maxWidth="container.lg">
-                    {!state.loggedin ? <SplashPage /> : !state.user ? <ProfilePage /> : <Outlet />}
+                    {!state.loggedin ? <SplashPage /> : !state.user ? <SignupPage /> : <Outlet />}
                 </Container>
                 <Footer />
             </>

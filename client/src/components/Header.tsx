@@ -37,9 +37,11 @@ export default function Header() {
 
                     <Box 
                     
-                    paddingRight="5px">
+                    paddingRight="5px"
+                    paddingLeft={"5px"}>
                     <Flex
-                        alignItems={"center"}>
+                        alignItems={"center"}
+                        gap={"35px"}>
                             <Link
                             to={"/matches"}>
                                 Matches
@@ -58,13 +60,13 @@ export default function Header() {
                 <Box
                 paddingLeft="5px">
                     <Flex
-                        alignItems={"center"}>
+                        alignItems={"center"}
+                        gap={"35px"}>
                             <Link
                             to={"/profile"}>
                                 Profile
                             </Link>
-                            <Text
-                            padding="10px">
+                            <Text>
                                 Sign Out
                             </Text>
                     </Flex>

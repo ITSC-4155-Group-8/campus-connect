@@ -4,7 +4,7 @@ function MatchesPage() {
     return (
         <>
             <Text>
-                Welcome to the Friends Page
+                Welcome to the Matches Page
             </Text>
         </>
     )
