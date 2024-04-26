@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import { Container, Image, Flex } from '@chakra-ui/react';
-import imgsrc from "./assets/logo.png"
+import { Container,} from '@chakra-ui/react';
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import NavFooter from "./components/NavFooter";
+import Loading from "./components/Loading";
 import SplashPage from "./pages/SplashPage";
 import SignupPage from "./pages/SignupPage";
 
@@ -37,13 +37,7 @@ function App() {
 
     if (state.loading) {
         return (
-            <>
-                <Flex style={{height: "100vh"}} direction="column" justifyContent="center">
-                    <Flex direction="row" justifyContent="center">
-                        <Image src={imgsrc} maxWidth={'400px'} rounded="1rem" />
-                    </Flex>
-                </Flex>
-            </>
+            <Loading/>
         );
     } else {
         return (
