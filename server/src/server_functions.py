@@ -465,6 +465,10 @@ def query_records(user, num):
   user_mongo_db = ''
   #print(email)
 
+  filter_criteria_user = {"email" : email}
+  matched_object_user = user_data_collection.find_one(filter_criteria_user)
+  owner_id = str(matched_object_user["_id"])
+
   list_of_pinecone_tags = ['bio', 'user_likes', 'user_dislikes', 'hidden_likes', 'hidden_dislikes']
   user_vectors = []
   # returns vectors for user and puts into an array
@@ -583,6 +587,7 @@ def query_records(user, num):
     result_JSON = json.loads(result_text)
     result_JSON['owner_name'] = mongodb_user['first_name']
     result_JSON['match_name'] = list_of_compatible_people_full[i]['first_name']
+    result_JSON['owner_id'] = owner_id
     result_JSON['match_id'] = str(list_of_compatible_people_full[i]['_id'])
     result_JSON['match_email'] = str(list_of_compatible_people_full[i]['email'])
     result_JSON['match_owner_email'] = mongodb_user['email']
@@ -825,6 +830,7 @@ def get_matched_object(match_id):
     "match_email" : matched_object["match_email"],
     "owner_name" : matched_object['owner_name'],
     "match_id" : matched_object["match_id"],
+    "owner_id" : matched_object["owner_id"],
     "match_owner_email" : matched_object["match_owner_email"],
     "match_object_id" : matched_object["match_object_id"],
     "match_datetime" : matched_object["match_datetime"],
