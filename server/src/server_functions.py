@@ -581,7 +581,7 @@ def query_records(user, num):
     result_text = re.sub(r'USER_1', mongodb_user['first_name'], result_text)
     result_text = re.sub(r'USER_2', list_of_compatible_people_full[i]['first_name'], result_text)
     result_JSON = json.loads(result_text)
-
+    result_JSON['owner_name'] = mongodb_user['first_name']
     result_JSON['match_name'] = list_of_compatible_people_full[i]['first_name']
     result_JSON['match_id'] = str(list_of_compatible_people_full[i]['_id'])
     result_JSON['match_email'] = str(list_of_compatible_people_full[i]['email'])
@@ -639,6 +639,7 @@ def generate_matches(user, num):
   'compatibility_description': "text here",
    'compatibility_score': '8',
    'match_name': 'David',
+   'owner_name' :
    'match_id': '662677973a90203840c8bb18',
    'match_email': 'dlee@uncc.edu',
    'match_owner_email': 'ejohnson@uncc.edu',
@@ -809,6 +810,7 @@ def get_matched_object(match_id):
   matched_object = {
     "match_name" : matched_object["match_name"],
     "match_email" : matched_object["match_email"],
+    "owner_name" : matched_object['owner_name'],
     "match_id" : matched_object["match_id"],
     "match_owner_email" : matched_object["match_owner_email"],
     "match_datetime" : matched_object["match_datetime"],
