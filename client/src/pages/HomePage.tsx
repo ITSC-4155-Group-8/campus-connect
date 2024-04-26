@@ -6,7 +6,7 @@ import {
     Card, 
     CardHeader, 
     CardBody, 
-    Container,
+    Container, 
 } from '@chakra-ui/react'
 
 import TextCard from "../components/TextCard";
@@ -15,7 +15,6 @@ import { useOutletContext, Link } from "react-router-dom";
 function HomePage() {
     const { user } = useOutletContext();
     return (
-        
         <>
             <Container position="absolute" mx="2%" my="6%" >    
                 <Text  fontSize={'5xl'}>Welcome back {user.first_name}</Text>         
