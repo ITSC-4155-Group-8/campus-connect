@@ -37,6 +37,10 @@ export default function Header() {
                         alignItems={"center"}
                         gap={"35px"}>
                             <Link
+                            to={"/"}>
+                                Home
+                            </Link>
+                            <Link
                             to={"/matches"}>
                                 Matches
                             </Link>
