@@ -36,7 +36,7 @@ function MatchesPage() {
     }, [])
 
     async function generate(){
-        const response = await fetch(apiURL + '/matches/generate', {
+        const response = await fetch(apiURL + '/generate_matches', {
             credentials: "include",
             method: "POST",
         })
