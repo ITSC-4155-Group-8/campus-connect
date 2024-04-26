@@ -1,13 +1,8 @@
-import { Link } from "react-router-dom";
 import imgsrc from "../assets/logo.png"
 import {
     Box,
     Flex,
-    Text,
-    IconButton,
     Image,
-    Stack,
-    Collapse,
     useColorModeValue,
     useBreakpointValue,
     useDisclosure,

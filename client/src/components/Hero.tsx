@@ -2,14 +2,11 @@ import { Link } from "react-router-dom"
 import PropTypes from "prop-types"
 import imgsrc from "../assets/logo.png"
 import {
-    Box,
     Button,
     Flex,
     Image,
     Heading,
-    Stack,
     Text,
-    Center,
     Spacer,
 } from "@chakra-ui/react"
 
@@ -48,6 +45,7 @@ export default function Hero() {
                     </Flex>
                 </Flex>
             </Flex>
+
         </>
     )
 }
