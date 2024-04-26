@@ -1,35 +1,47 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { 
-    Input,
     Flex,
+    Button,
     Text,
  } from '@chakra-ui/react'
  import UserCard from '../components/UserCard';
 function MatchesPage() {
-    const [ state, setState ] = useState([
-        {
-            name: "Andrew Bertlshofer",
-            year: "Senior",
-            major: "CS",
-            email: "abertlsh@uncc.edu",
-            compatibility_score: "100",
-            compatibility_description: "big amount of text",
-            
-        },
-        {
-            name: "Andrew Bertlshofer",
-            year: "Senior",
-            major: "CS",
-            email: "abertlsh@uncc.edu"
-        },
-        {
-            name: "Andrew Bertlshofer",
-            year: "Senior",
-            major: "CS",
-            email: "abertlsh@uncc.edu"
+    const [ state, setState ] = useState([])
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const response = await fetch(apiURL + '/matches', {
+                    credentials: "include",
+                })
+                const matches = (await response.json()).queue
+                let match_arr = []
+                matches.forEach(async m => {
+                    const r = await fetch(apiURL + '/users/' + m.match_id, {
+                        credentials: "include",
+                    })
+                    const u = await r.json()
+                    match_arr.push([m, u])
+                    if (match_arr.length === matches.length) {
+                        setState(match_arr) 
+                    }
+                });
+                
+            } catch {
+                
+            }
         }
-    ])
+
+        fetchData();
+    }, [])
+
+    async function generate(){
+        const response = await fetch(apiURL + '/matches/generate', {
+            credentials: "include",
+            method: "POST",
+        })
+    }
+
     return (
         <>
             <Flex
@@ -37,12 +49,15 @@ function MatchesPage() {
             padding='10'
             direction={'column'}
             gap={"1rem"}>
+                <Button variant='solid' colorScheme='blue' onClick={generate}>
+                    Generate Matches
+                </Button>
                 <Text
                 fontSize='30px'>
-                    Users You Matched With:
+                    Users Your Matched With:
                 </Text>  
                 {
-                state.map(user => <UserCard user={user}/>)
+                state.map(m => <UserCard user={m[1]}/>)
             }
             </Flex>
         </>

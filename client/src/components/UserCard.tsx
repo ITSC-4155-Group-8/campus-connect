@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardBody, CardFooter, Heading, Text, Box, Button, Stack, useColorModeValue, StackDivider } from '@chakra-ui/react'
+import { Card, CardHeader, CardBody, Heading, Text, Box, Button, Stack, useColorModeValue, StackDivider } from '@chakra-ui/react'
 import { useState } from 'react';
 
 export default function UserCard(props) {

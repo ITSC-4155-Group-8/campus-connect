@@ -8,7 +8,6 @@ import NavFooter from "./components/NavFooter";
 import Loading from "./components/Loading";
 import SplashPage from "./pages/SplashPage";
 import SignupPage from "./pages/SignupPage";
-import MainPage from "./pages/MainPage";
 import MatchesPage from "./pages/MatchesPage";
 import ProfilePage from "./pages/ProfilePage";
 
