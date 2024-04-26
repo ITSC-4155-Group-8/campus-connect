@@ -3,10 +3,10 @@ import { useState } from 'react';
 
 export default function UserCard(props) {
     const user = props.user;
-    const match_id = props.match_id;
+    const match = props.match;
     const [buttonText, setButtonText] = useState('False');
     const handleClick =async () => {setButtonText('True')
-        const response = await fetch(apiURL + '/matches/'+match_id+"/accept", {
+        const response = await fetch(apiURL + '/matches/'+match.match_object_id+"/accept", {
             credentials: "include",
             method: "POST",
         })
@@ -15,7 +15,7 @@ export default function UserCard(props) {
             <Card
             backgroundColor={useColorModeValue('blue.200', 'gray.800')}style={{ border: "2px solid black" }}>
                 <CardHeader>
-                    <Heading size='md'>{user.name}</Heading>
+                    <Heading size='md'>{user.first_name} {user.last_name}</Heading>
                 </CardHeader>
                 <CardBody>
                     <Stack divider={<StackDivider />} spacing='2'>
@@ -24,7 +24,7 @@ export default function UserCard(props) {
                                 School Year
                             </Heading>
                             <Text pt='2' fontSize='sm'>
-                                {user.year}
+                                {user.school_year}
                             </Text>
                         </Box>
                         <Box>
@@ -48,7 +48,7 @@ export default function UserCard(props) {
                                 Compatibility Score
                             </Heading>
                             <Text pt='2' fontSize='sm'>
-                                {user.compatibility_score}
+                                {match.compatibility_score}
                             </Text>
                         </Box>
                         <Box>
@@ -56,7 +56,7 @@ export default function UserCard(props) {
                                 Compatibility description
                             </Heading>
                             <Text pt='2' fontSize='sm'>
-                                {user.compatibility_description}
+                                {match.compatibility_description}
                             </Text>
                         </Box>
                         <Box>

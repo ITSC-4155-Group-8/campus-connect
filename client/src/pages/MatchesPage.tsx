@@ -20,7 +20,7 @@ function MatchesPage() {
                 let match_arr = []
                 matches.forEach(async m => {
                     const owner = m.match_owner_email === user.email
-                    const r = await fetch(apiURL + '/users/' + owner ? m.match_id : m.owner_id, {
+                    const r = await fetch(apiURL + '/users/' + (owner ? m.match_id : m.owner_id), {
                         credentials: "include",
                     })
                     const u = await r.json()
@@ -60,7 +60,7 @@ function MatchesPage() {
                     Users Your Matched With:
                 </Text>  
                 {
-                state.map(m => <UserCard match_id={m[0].match_object_id} user={m[1]}/>)
+                state.map(m => <UserCard match={m[0]} user={m[1]}/>)
             }
             </Flex>
         </>
