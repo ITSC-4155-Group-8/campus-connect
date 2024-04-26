@@ -110,7 +110,7 @@ def callback():
     user_data = db.user_data.find_one({'email': users_email})
     if user_data:
         print(user_data)
-        generate_matches(user_data, 1)
+    #    generate_matches(user_data, 1)
     
     # Send user back to homepage
     return redirect(URL)
