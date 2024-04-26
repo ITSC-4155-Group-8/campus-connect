@@ -45,8 +45,6 @@ function MatchesPage() {
                 state.map(user => <UserCard user={user}/>)
             }
             </Flex>
-           
-            
         </>
     )
 }

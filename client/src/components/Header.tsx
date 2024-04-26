@@ -33,38 +33,43 @@ export default function Header() {
                 px={{ base: 4 }}
                 borderBottom={1}
                 borderStyle={'solid'}
-                borderColor={useColorModeValue('gray.200', 'gray.900')}>
-                
-                
-                <Box
-                padding="5px">
+                borderColor={useColorModeValue('gray.200', 'gray.900')}
+                >
+        
+                    
+
+                    <Box 
+                    
+                    paddingRight="5px"
+                    paddingLeft={"5px"}>
                     <Flex
-                        alignItems={"center"}>
-                            <Text
-                            padding="10px">
+                        alignItems={"center"}
+                        gap={"35px"}>
+                            <Link
+                            to={"/matches"}>
                                 Matches
-                            </Text>
-                            <Text
-                            padding="10px">
+                            </Link>
+                            <Link
+                            to={"/chat"}>
                                 Chat
-                            </Text>
-                            <Text
-                            padding="10px">
+                            </Link>
+                            <Link
+                            to={"/friends"}>
                                 Friends
-                            </Text>
+                            </Link>
                     </Flex>
                 </Box>
                 <Image src={imgsrc} height='50px' padding={"0"} />
                 <Box
-                padding="5px">
+                paddingLeft="5px">
                     <Flex
-                        alignItems={"center"}>
-                            <Text
-                            padding="10px">
+                        alignItems={"center"}
+                        gap={"35px"}>
+                            <Link
+                            to={"/profile"}>
                                 Profile
-                            </Text>
-                            <Text
-                            padding="10px">
+                            </Link>
+                            <Text>
                                 Sign Out
                             </Text>
                     </Flex>
@@ -72,7 +77,8 @@ export default function Header() {
                 
                 
         
-                
+
+
             </Flex>
 
         </Box>

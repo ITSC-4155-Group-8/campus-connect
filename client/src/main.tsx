@@ -11,6 +11,10 @@ import App from './App.tsx'
 
 import HomePage from './pages/HomePage';
 import MatchesPage from './pages/MatchesPage';
+import ProfilePage from './pages/ProfilePage'; 
+import MatchesPage from './pages/MatchesPage'; 
+import ChatPage from './pages/ChatPage'; 
+import FriendsPage from './pages/FriendsPage.tsx';
 
 const router = createBrowserRouter([
     {
@@ -23,8 +27,24 @@ const router = createBrowserRouter([
                 element: <HomePage />,
             },
             {
+                path: "profile",
+                element: <ProfilePage />
+            },
+            {
+                path: "chat",
+                element: <ChatPage />
+            }, 
+            {
+                path: "friends",
+                element: <FriendsPage />
+            }, 
+            {
+                path: "profile",
+                element: <ProfilePage />
+            },
+            {
                 path: "matches",
-                element: <MatchesPage/>
+                element: <MatchesPage />
             }
         ],
     },
