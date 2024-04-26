@@ -14,7 +14,7 @@ function MatchesPage() {
                 const response = await fetch(apiURL + '/matches', {
                     credentials: "include",
                 })
-                const matches = (await response.json()).queue
+                const matches = (await response.json()).match_queue
                 let match_arr = []
                 matches.forEach(async m => {
                     const r = await fetch(apiURL + '/users/' + m.match_id, {
@@ -57,7 +57,7 @@ function MatchesPage() {
                     Users Your Matched With:
                 </Text>  
                 {
-                state.map(m => <UserCard user={m[1]}/>)
+                state.map(m => <UserCard match_id={m[0].id} user={m[1]}/>)
             }
             </Flex>
         </>

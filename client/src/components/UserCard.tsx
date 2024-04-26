@@ -3,8 +3,14 @@ import { useState } from 'react';
 
 export default function UserCard(props) {
     const user = props.user;
+    const match_id = props.match_id;
     const [buttonText, setButtonText] = useState('False');
-    const handleClick = () => {setButtonText('True')} ;
+    const handleClick =async () => {setButtonText('True')
+        const response = await fetch(apiURL + '/matches/'+match_id+"/accept", {
+            credentials: "include",
+            method: "POST",
+        })
+    } ;
     return (
             <Card
             backgroundColor={useColorModeValue('blue.200', 'gray.800')}style={{ border: "2px solid black" }}>
