@@ -800,6 +800,9 @@ def get_matched_object(match_id):
   filter_criteria = {"_id" : ObjectId(match_id)}
   matched_object = match_collection.find_one(filter_criteria)
 
+  if matched_object == None:
+    return None
+  
   matched_object = {
     "match_name" : matched_object["match_name"],
     "match_email" : matched_object["match_email"],
