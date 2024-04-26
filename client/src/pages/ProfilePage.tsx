@@ -2,51 +2,61 @@
 import { Container, Box, Text, Flex, Image, Heading, Button, Input } from '@chakra-ui/react'
 import imgsrc from "../assets/profilePic.jpg"
 import { EditIcon } from '@chakra-ui/icons'
-import { useState } from 'react'; 
+import { useState, useEffect } from 'react'; 
+import { useOutletContext } from 'react-router-dom';
 
 
 
-// const matchClick = () => {editingProfile = true, console.log(editingProfile)}; 
-// const matchClick2 = () => {editingProfile = false, console.log(editingProfile)}; 
+// class User {
+//     name: string;
+//     hometown: string; 
+//     major: string; 
+//     bio: string; 
 
-class User {
-    name: string;
-    hometown: string; 
-    major: string; 
-    bio: string; 
+//     constructor(name: string, hometown: string, major: string, bio: string) {
+//         this.name = name;
+//         this.hometown = hometown; 
+//         this.major = major; 
+//         this.bio = bio; 
+//     }
+// }
 
-    constructor(name: string, hometown: string, major: string, bio: string) {
-        this.name = name;
-        this.hometown = hometown; 
-        this.major = major; 
-        this.bio = bio; 
-    }
-}
+// let user = new User('Pedro', 'Hickory', 'Computer Science', "I like watching movies, building Lego, and walking my dog.");
 
-let user = new User('Pedro', 'Hickory', 'Computer Science', "I like watching movies, building Lego, and walking my dog.");
+
 
 function ProfilePage() {
+
+    const { user } = useOutletContext();
+
     const [editingProfile, setEditingProfile] = useState(false);
-    const [editedHometown, setEditedHometown] = useState(user.hometown);
-    const [editedMajor, setEditedMajor] = useState(user.major);
-    const [editedBio, setEditedBio] = useState(user.bio);
+    const [editedHometown, setEditedHometown] = useState(Response.name);
+    // const [editedMajor, setEditedMajor] = useState(Response.major);
+    // const [editedBio, setEditedBio] = useState(user.bio);
 
     const handleEditProfile = () => {
         setEditingProfile(true);
     };
 
-    const handleSaveChanges = () => {
-        user.hometown = editedHometown;
-        user.major = editedMajor;
-        user.bio = editedBio;
-        setEditingProfile(false);
-    };
+    console.log(user); 
+
+    // const handleSaveChanges = () => {
+    //     user.hometown = editedHometown;
+    //     user.major = editedMajor;
+    //     user.bio = editedBio;
+    //     setEditingProfile(false);
+    // };
 
     return (
         <>
             <Flex justifyContent={'flex-start'} padding='10' direction={'row'} gap={"50px"}>
                 <Image src={imgsrc} height='100px' width='100px' padding={"0"} />
-                <Heading fontSize='30px'>{user.name}</Heading>  
+                <Flex
+                direction={"column"}
+                gap={"10px"}>
+                    <Heading fontSize='30px'>{user.first_name} {user.last_name}</Heading>  
+                    <Text fontSize='15px' as='b' >{user.email}</Text>
+                </Flex>
             </Flex>
 
             <Box>
@@ -72,18 +82,41 @@ function ProfilePage() {
                         </>
                     ) : (
                         <>
-                            <Text>Hometown: {user.hometown}</Text>
+                        <Box
+                        padding={"20px"}
+                        borderRadius={'lg'}
+                        background={"#CCEEFF"}>
+                            <Flex
+                            direction={"column"}gap={"5"}>
+                            <Text>Age: {user.age}</Text>
+
                             <Text>Major: {user.major}</Text>
+
                             <Text>Bio: {user.bio}</Text>
-                            <Box 
-                            height={"150px"}></Box>
-                            <Button leftIcon={<EditIcon />} colorScheme='blue' onClick={handleEditProfile}>Edit Profile</Button>
+
+                            <Text>School Year:  {user.school_year}</Text>
+
+                            <Text>User Likes: {user.user_likes}</Text>
+
+                            <Text>Dislikes: {user.user_dislikes}</Text>
+
+
+                            <Text>Hidden Likes: {user.hidden_likes}</Text>
+
+                            <Text>Hidden Dislikes: {user.hidden_dislikes}</Text>
+                            </Flex>
+                        </Box>
+
+                        <Box height={"100px"}></Box>
+                            
                         </>
                     )}
                 </Flex>
-            </Box>
+            </Box> 
         </>
     )
 }
 
+
+    
 export default ProfilePage;
