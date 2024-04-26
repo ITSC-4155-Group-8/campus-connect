@@ -149,6 +149,19 @@ def get_user_data(user_id=None):
     user_data.pop('_id')
     return jsonify(user_data)
 
+@api_routes.route("/api/users/<user_id>/edit", methods = [ 'GET' ])
+@login_required
+def edit_user_data(user_id=None):
+    print(user_id)
+    user_data = user_data_collection.find_one({'_id': ObjectId(user_id)})
+    if not user_data:
+        return Response(status=404)
+    user_data.pop('_id')
+    
+    update_record(user_data)
+
+    return Response(status=200)
+
 
 @api_routes.route("/api/matches/<match_id>/<string:text_message>/send_message", methods = [ 'POST' ])
 @login_required
