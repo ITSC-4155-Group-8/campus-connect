@@ -1,15 +1,11 @@
 import imgsrc from "../assets/logo.png"
+import { Link } from 'react-router-dom';
 import {
     Box,
     Flex,
     Image,
     useColorModeValue,
-    useBreakpointValue,
-    useDisclosure,
-    Container
 } from '@chakra-ui/react'
-import { HamburgerIcon } from '@chakra-ui/icons'
-import { inherits } from "util";
 
 export default function Header() {
 
@@ -64,9 +60,9 @@ export default function Header() {
                             to={"/profile"}>
                                 Profile
                             </Link>
-                            <Text>
+                            <Link to={logoutURL}>
                                 Sign Out
-                            </Text>
+                            </Link>
                     </Flex>
                 </Box>
                 

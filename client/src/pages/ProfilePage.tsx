@@ -1,9 +1,8 @@
 // import { Link } from "react-router-dom";
 import { Container, Box, Text, Flex, Image, Heading, Button, Input } from '@chakra-ui/react'
 import imgsrc from "../assets/profilePic.jpg"
-import { BindOptions } from 'dgram';
 import { EditIcon } from '@chakra-ui/icons'
-import React, { useState } from 'react'; 
+import { useState } from 'react'; 
 
 
 

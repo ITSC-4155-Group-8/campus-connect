@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import {
     Button,
     Heading,
@@ -10,60 +9,21 @@ import {
     Container,
 } from '@chakra-ui/react'
 
-import Loading from "../components/Loading";
 import TextCard from "../components/TextCard";
-
-interface User {
-    first_name: string;
-    last_name:String;
-    matches:[];
-}
+import { useOutletContext } from "react-router-dom";
 
 function HomePage() {
-    const [state, setState] = useState<{
-        loading: boolean;
-        user: User | null;
-        loggedin: boolean;
-    }>({
-        loading: true,
-        user: null,
-        loggedin: false
-    });
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const response = await fetch(apiURL + '/profile', {
-                    method:'GET',   
-                    credentials: "include",
-                })
-                if (response.status == 404) {
-                    setState({ user: null, loading: false, loggedin: true })
-                } else {
-                    const json = await response.json()
-                    setState({ user: json, loading: false, loggedin: true })
-                }
-            } catch {
-                setState({ user: null, loading: false, loggedin: false })
-            }
-        }
-
-        fetchData();
-    }, [])
-    if (state.loading) {
-        return (
-            <Loading/>
-        );
-    } else {
+    const { user } = useOutletContext();
     return (
         
         <>
             <Container position="absolute" mx="2%" my="6%" >    
-                <Text  fontSize={'5xl'}>Welcome back {state.user?.first_name}</Text>         
+                <Text  fontSize={'5xl'}>Welcome back {user.first_name}</Text>         
             </Container>
             <TextCard/>
             <Card position="absolute" mx="12%" my="14%" border="1px solid black">
             <CardHeader>
-                <Heading size='md'>You have {(state.user?.matches)?.length} matches:</Heading>
+                <Heading size='md'>You have {(user.matches).length} matches:</Heading>
             </CardHeader>
             <CardBody>
                 <Button variant='solid' colorScheme='blue'>
@@ -74,7 +34,6 @@ function HomePage() {
             <Flex style={{ height: "calc(100vh - 120px)" }}></Flex>       
         </>
     )
-}
 }
 
 export default HomePage;

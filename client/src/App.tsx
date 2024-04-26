@@ -48,7 +48,7 @@ function App() {
                 <Header />
                 <Container maxWidth="container.lg">
                     {!state.loggedin ? <SplashPage /> : !state.user ? <SignupPage /> : <>
-                    <Outlet />
+                    <Outlet context={{user: state.user.user_data}} />
                     <NavFooter/>
                     </>}
                 </Container>
