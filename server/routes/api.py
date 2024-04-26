@@ -7,7 +7,7 @@ from bson import ObjectId
 
 from src.db import db, login_collection, user_data_collection, match_collection
 from src.user import User
-from src.server_functions import create_record
+from src.server_functions import *
 
 # ROUTES -------------------------------
 
@@ -59,17 +59,26 @@ def get_matches():
     user_data = user_data_collection.find_one({'email': User.get_user_by_id(current_user.id).__dict__['email']})
     if not user_data:
         return Response(status=500)
-    match_arr = []
-    for m in user_data['match_queue']:
-        match_data = match_collection.find_one({'_id': ObjectId(m)})
-        match_data.pop('_id')
-        match_arr.append(match_data)
-    return jsonify(match_arr)
+
+    match_queue = []
+    matches = []
+
+    for match in user_data['match_queue']:
+        match_obj = get_matched_object(match)
+        match_queue.append(match_obj)
+    
+    for match in user_data['matches']:
+        match_obj = get_matched_object(match)
+        match_obj.pop('_id')
+        matches.append(match_obj)
+
+    return jsonify(match_queue, matches)
 
 
 @api_routes.route("/api/matches/<match_id>", methods = [ 'GET' ])
 @login_required
 def get_match_data(match_id=None):
+    #user_data = get_user_profile(User.get_user_by_id(current_user.id).__dict__['email'])
     user_data = user_data_collection.find_one({'email': User.get_user_by_id(current_user.id).__dict__['email']})
     if not user_data:
         return Response(status=500)
