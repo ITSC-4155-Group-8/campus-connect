@@ -6,7 +6,9 @@ import {
     Text,
  } from '@chakra-ui/react'
  import UserCard from '../components/UserCard';
+import { useOutletContext } from 'react-router-dom';
 function MatchesPage() {
+    const { user } = useOutletContext();
     const [ state, setState ] = useState([])
     useEffect(() => {
         async function fetchData() {
@@ -17,7 +19,8 @@ function MatchesPage() {
                 const matches = (await response.json()).match_queue
                 let match_arr = []
                 matches.forEach(async m => {
-                    const r = await fetch(apiURL + '/users/' + m.match_id, {
+                    const owner = m.match_owner_email === user.email
+                    const r = await fetch(apiURL + '/users/' + owner ? m.match_id : m.owner_id, {
                         credentials: "include",
                     })
                     const u = await r.json()
