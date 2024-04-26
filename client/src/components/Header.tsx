@@ -50,7 +50,9 @@ export default function Header() {
                             </Link>
                     </Flex>
                 </Box>
-                <Image src={imgsrc} height='50px' padding={"0"} />
+
+                <Link to={""}><Image src={imgsrc} height='50px' padding={"0"} /></Link>
+
                 <Box
                 paddingLeft="5px">
                     <Flex
