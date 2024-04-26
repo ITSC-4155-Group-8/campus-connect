@@ -72,7 +72,7 @@ def get_matches():
         match_obj.pop('_id')
         matches.append(match_obj)
 
-    return jsonify({'queue': match_queue, 'accepted': matches})
+    return jsonify({'match_queue': match_queue, 'matches': matches})
 
 
 @api_routes.route("/api/matches/<match_id>", methods = [ 'GET' ])

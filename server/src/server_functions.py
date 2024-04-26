@@ -671,6 +671,9 @@ def generate_matches(user, num):
 
 
 def user_wants_to_match(user, match_queue_id):
+  if match_queue_id == None:
+    return None
+  
   mongodb_user = create_mongo_db_user(user)
   #print('mongodb_user')
   #print(mongodb_user)
