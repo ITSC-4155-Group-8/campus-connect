@@ -51,6 +51,16 @@ def get_profile_data():
 #        user_data_collection.replace_one({ 'email': User.get_user_by_id(current_user.id).__dict__['email'] }, user_doc, upsert=True)
         create_record(user_doc)
         return Response(status=200)
+    
+@api_routes.route("/api/generate_matches", methods = [ 'POST' ])
+@login_required
+def generate_matches():
+    user_data = user_data_collection.find_one({'email': User.get_user_by_id(current_user.id).__dict__['email']})
+    if not user_data:
+        return Response(status=500)
+
+    generate_matches(user_data, 1)
+    return Response(status=200)
 
 
 @api_routes.route("/api/matches", methods = [ 'GET' ])
