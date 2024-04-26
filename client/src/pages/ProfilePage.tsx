@@ -49,8 +49,10 @@ function ProfilePage() {
 
     return (
         <>
+            
             <Flex justifyContent={'flex-start'} padding='10' direction={'row'} gap={"50px"}>
                 <Image src={imgsrc} height='100px' width='100px' padding={"0"} />
+                
                 <Flex
                 direction={"column"}
                 gap={"10px"}>
@@ -58,6 +60,7 @@ function ProfilePage() {
                     <Text fontSize='15px' as='b' >{user.email}</Text>
                 </Flex>
             </Flex>
+            
 
             <Box>
                 <Flex gap={"15"} direction={"column"}>
