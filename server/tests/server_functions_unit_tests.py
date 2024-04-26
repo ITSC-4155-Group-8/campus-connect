@@ -1,4 +1,4 @@
-from server_functions import *
+from src.server_functions import *
 
 # Unit Test 1
 def verify_pc_connection():

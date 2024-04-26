@@ -10,6 +10,10 @@ import theme from './theme';
 import App from './App.tsx'
 
 import HomePage from './pages/HomePage';
+import MatchesPage from './pages/MatchesPage';
+import ProfilePage from './pages/ProfilePage';
+import ChatPage from './pages/ChatPage'; 
+import FriendsPage from './pages/FriendsPage.tsx';
 
 const router = createBrowserRouter([
     {
@@ -21,6 +25,26 @@ const router = createBrowserRouter([
                 path: "",
                 element: <HomePage />,
             },
+            {
+                path: "profile",
+                element: <ProfilePage />
+            },
+            {
+                path: "chat",
+                element: <ChatPage />
+            }, 
+            {
+                path: "friends",
+                element: <FriendsPage />
+            }, 
+            {
+                path: "profile",
+                element: <ProfilePage />
+            },
+            {
+                path: "matches",
+                element: <MatchesPage />
+            }
         ],
     },
 ]);

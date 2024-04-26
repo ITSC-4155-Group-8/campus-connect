@@ -33,17 +33,18 @@ enum GradeEnum {
 }
 
 type Inputs = {
-    firstname: string,
-    lastname: string,
+    first_name: string,
+    last_name: string,
     gender: GenderEnum,
     age: number,
-    grade: GradeEnum,
+    school_year: GradeEnum,
     major: string,
+    minor: string,
     bio: string,
-    likes:string,
-    dislikes:string,
-    h_likes:string,
-    h_dislikes:string,
+    likes: string,
+    dislikes: string,
+    h_likes: string,
+    h_dislikes: string,
 }
 
 function SignupPage() {
@@ -74,34 +75,34 @@ function SignupPage() {
             <Spacer height={"20px"}/>
             <Flex flexWrap="wrap">
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <FormControl isInvalid={Boolean(errors.firstname)}>
-                        <FormLabel htmlFor='firstname'>First name</FormLabel>
+                    <FormControl isInvalid={Boolean(errors.first_name)}>
+                        <FormLabel htmlFor='first_name'>First name</FormLabel>
                         <Input
-                            id='firstname'
+                            id='first_name'
                             placeholder='First name'
-                            {...register('firstname', {
+                            {...register('first_name', {
                                 required: 'This is required',
                                 minLength: { value: 1, message: 'Minimum length should be 1' },
                             })}
                         />
                         <FormErrorMessage>
-                            {errors.firstname && errors.firstname.message}
+                            {errors.first_name && errors.first_name.message}
                         </FormErrorMessage>
                     </FormControl>
                     <Spacer height={"20px"}/>
 
-                    <FormControl isInvalid={Boolean(errors.lastname)}>
-                        <FormLabel htmlFor='lastname'>Last name</FormLabel>
+                    <FormControl isInvalid={Boolean(errors.last_name)}>
+                        <FormLabel htmlFor='last_name'>Last name</FormLabel>
                         <Input
-                            id='lastname'
+                            id='last_name'
                             placeholder='Last name'
-                            {...register('lastname', {
+                            {...register('last_name', {
                                 required: 'This is required',
                                 minLength: { value: 1, message: 'Minimum length should be 1' },
                             })}
                         />
                         <FormErrorMessage>
-                            {errors.lastname && errors.lastname.message}
+                            {errors.last_name && errors.last_name.message}
                         </FormErrorMessage>
                     </FormControl>
                     <Spacer height={"20px"}/>
@@ -145,11 +146,11 @@ function SignupPage() {
                     </FormControl>
                     <Spacer height={"20px"}/>
 
-                    <FormControl isInvalid={Boolean(errors.grade)}>
-                        <FormLabel htmlFor='grade'>Grade Level</FormLabel>
+                    <FormControl isInvalid={Boolean(errors.school_year)}>
+                        <FormLabel htmlFor='school_year'>Grade Level</FormLabel>
                         <Select
-                            id='grade'
-                            {...register('grade', {
+                            id='school_year'
+                            {...register('school_year', {
                                 required: 'This is required',
                             })}
                         >
@@ -160,7 +161,7 @@ function SignupPage() {
                             <option value='other'>Other</option>
                         </Select>
                         <FormErrorMessage>
-                            {errors.grade && errors.grade.message}
+                            {errors.school_year && errors.school_year.message}
                         </FormErrorMessage>
                     </FormControl>
                     <Spacer height={"20px"}/>
@@ -181,9 +182,22 @@ function SignupPage() {
                     </FormControl>
                     <Spacer height={"20px"}/>
 
+                    <FormControl isInvalid={Boolean(errors.minor)}>
+                        <FormLabel htmlFor='minor'>Minor</FormLabel>
+                        <Input
+                            id='minor'
+                            placeholder='minor'
+                            {...register('minor')}
+                        />
+                        <FormErrorMessage>
+                            {errors.minor && errors.minor.message}
+                        </FormErrorMessage>
+                    </FormControl>
+
                     <FormControl isInvalid={Boolean(errors.bio)}>
                         <FormLabel htmlFor='bio'>Bio</FormLabel>
                         <Textarea
+                            id="bio"
                             placeholder='Enter bio Here'
                             size='sm'
                             {...register('bio', {
@@ -198,7 +212,7 @@ function SignupPage() {
                     <Spacer height={"20px"}/>
 
                     <FormControl isInvalid={Boolean(errors.bio)}>
-                    <FormLabel htmlFor='likes'>Let others know what you like:</FormLabel>
+                        <FormLabel htmlFor='likes'>Let others know what you like:</FormLabel>
                         <Textarea justifyContent={'center'}
                             placeholder='Ex: Video Games, Fencing, Swimming, ect...'
                             size='sm'
@@ -207,7 +221,7 @@ function SignupPage() {
                                 minLength: { value: 1, message: 'Minimum length should be 1' },
                             })}
                         />
-                    <FormErrorMessage>
+                        <FormErrorMessage>
                             {errors.likes && errors.likes.message}
                         </FormErrorMessage>
                     </FormControl>
@@ -223,7 +237,7 @@ function SignupPage() {
                                 minLength: { value: 1, message: 'Minimum length should be 1' },
                             })}
                         />
-                    <FormErrorMessage>
+                        <FormErrorMessage>
                             {errors.dislikes && errors.dislikes.message}
                         </FormErrorMessage>
                     </FormControl>
@@ -239,7 +253,7 @@ function SignupPage() {
                                 minLength: { value: 1, message: 'Minimum length should be 1' },
                             })}
                         />
-                    <FormErrorMessage>
+                        <FormErrorMessage>
                             {errors.h_likes && errors.h_likes.message}
                         </FormErrorMessage>
                     </FormControl>

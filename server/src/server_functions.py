@@ -1,61 +1,23 @@
-#vectorized db imports
-from pinecone import Pinecone
-from pinecone import ServerlessSpec
-from pinecone import PodSpec
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # import regular expressions
 import re
-
 # objectID for mongodb
 from bson import ObjectId
-
 # import JSON for formatting
 import json
-
 # import datetime
 import datetime
-
-# match case
-from ast import match_case
-
-# imports time
-import time
-
-# mongodb imports
-import pymongo
-
-from pymongo import MongoClient
-
 # openAI imports
 from openai import OpenAI
 
-# import json
-import json
+from src.db import db, match_collection, user_data_collection
+from src.pinecone import pc_index
 
-# api key for vectorized db
-pc = Pinecone(api_key='59f47e61-ea2e-43fa-945c-432d3e67f190')
+client = OpenAI(api_key=os.getenv("OPENAI_KEY"))
 
-# connecting to mongo db
-connection_string = "mongodb+srv://test:<test@itsc4155.okxsgq3.mongodb.net/"
-client_mongodb = MongoClient(connection_string, username='test', password='test')
-
-# verify connection to pinecone vectorized database
-
-# see https://docs.pinecone.io/v1/docs/quickstart namespaces
-pc_index = pc.Index("pc-campus-connect-db")
-
-# connect to mongodb + collection + verify connection
-mongodb = client_mongodb.get_database('campus_connect_db') # the part after dot is name of your db
-mongodb_records = mongodb.campus_connect_records
-
-# connect to mongodb match records
-mongodb_record_matches = mongodb.campus_connect_match_records
-
-# api key for openAI
-client = OpenAI( # please don't share this key it charges to my account
-    api_key="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"
-)
 # vectorization model
 MODEL = "text-embedding-3-small"
 
@@ -220,7 +182,7 @@ def create_mongo_db_user(user):
   #
   #update the mongodb
   #filter_criteria = {"email": email}
-  #checked_user = mongodb_records.find_one(filter_criteria)
+  #checked_user = user_data_collection.find_one(filter_criteria)
 
   #if checked_user:
   # create mongodb user
@@ -278,7 +240,8 @@ def create_record(user):
   # creats the JSON format for a mongodb_user
   mongodb_user = create_mongo_db_user(user)
   # add user to mongodb
-  insert_result = mongodb_records.insert_one(mongodb_user)
+  insert_result = user_data_collection.insert_one(mongodb_user)
+#  insert_result = user_data_collection.replace_one({ 'email': user['email'] }, user, upsert=True)
   #print(insert_result.inserted_id)
   insert_id = insert_result.inserted_id
 
@@ -315,9 +278,9 @@ def update_record(user):
     }
   }
 
-  mongodb_records.update_one(filter_criteria, update_values)
+  user_data_collection.update_one(filter_criteria, update_values)
   # same code in create_record and named the same for understanding, all it does is it grabs the _id
-  insert_result = mongodb_records.find_one(filter_criteria)
+  insert_result = user_data_collection.find_one(filter_criteria)
   # '_id': ObjectId('6609cc0a5097d9acf1f2e529')
   id = insert_result['_id']
   # get data augmented for use
@@ -339,10 +302,10 @@ def delete_match(_id, debug=False):
     filter_criteria = {"_id" : _id}
 
     # gets local copy of match_object
-    match_object = mongodb_record_matches.find_one(filter_criteria)
+    match_object = match_collection.find_one(filter_criteria)
     _id = str(_id)
 
-    mongodb_record_matches.delete_one(filter_criteria)
+    match_collection.delete_one(filter_criteria)
     if debug:
       print('deleting match object sucessful')
 
@@ -352,7 +315,7 @@ def delete_match(_id, debug=False):
     user_to_find = match_object['match_id']
 
     filter_criteria = {"_id" : ObjectId(user_to_find)}
-    matched_user = mongodb_records.find_one(filter_criteria)
+    matched_user = user_data_collection.find_one(filter_criteria)
     if debug:
       print('found match user', matched_user)
 
@@ -393,7 +356,7 @@ def delete_match(_id, debug=False):
     if debug:
       print('update values to send to record', update_values)
       print('updating the users matches')
-    mongodb_records.update_one(filter_criteria, update_values)
+    user_data_collection.update_one(filter_criteria, update_values)
 
     if debug:
       print('update sucessful')
@@ -453,7 +416,7 @@ def delete_record(user, debug=False):
 
   filter_criteria = {"email": mongodb_user['email']}
 
-  mongodb_records.delete_one(filter_criteria)
+  user_data_collection.delete_one(filter_criteria)
 
   return True
 
@@ -507,7 +470,7 @@ def query_records(user, num):
   # returns vectors for user and puts into an array
   for tag in list_of_pinecone_tags:
       pinecone_result = pc_index.fetch([email], namespace=tag)
-      #print(pinecone_result)
+      # print(pinecone_result)
       # pinecone_result returns an object, this is the parsed version only getting the vectors
       user_vectors.append(pinecone_result['vectors'][email]['values'])
       # note this is cheesed a bit here sloppy code
@@ -554,7 +517,7 @@ def query_records(user, num):
   # search the mongodb
   query = {"email": {"$in": ids, "$ne": email}}
   # cursor contains a list of documents
-  cursor = mongodb_records.find(query)
+  cursor = user_data_collection.find(query)
 
   list_of_compatible_people = []
   list_of_compatible_people_full = []
@@ -644,7 +607,7 @@ def create_matches(matches):
   match_ids = []
 
   for match_ppl in matches:
-    insert_result = mongodb_record_matches.insert_one(match_ppl)
+    insert_result = match_collection.insert_one(match_ppl)
     #print(insert_result.inserted_id)
     insert_id = insert_result.inserted_id
     match_ids.append(str(insert_id))
@@ -668,7 +631,7 @@ def generate_matches(user, num):
         # Add more fields and values to update as needed
     }
   }
-  mongodb_records.update_one(filter_criteria, update_values)
+  user_data_collection.update_one(filter_criteria, update_values)
 
 
   '''
@@ -687,7 +650,7 @@ def generate_matches(user, num):
   for match_u in create_match_ids:
     # add records to the matched persons queue
     filter_criteria = {"_id" : ObjectId(match_u)}
-    matched_user = mongodb_record_matches.find_one(filter_criteria)
+    matched_user = match_collection.find_one(filter_criteria)
     print(matched_user)
     email = matched_user['match_email']
     match_id = matched_user['match_id']
@@ -704,7 +667,7 @@ def generate_matches(user, num):
           # Add more fields and values to update as needed
       }
     }
-    mongodb_records.update_one(filter_criteria, update_values)
+    user_data_collection.update_one(filter_criteria, update_values)
 
 
 def user_wants_to_match(user, match_queue_id):
@@ -715,8 +678,8 @@ def user_wants_to_match(user, match_queue_id):
   print('filter criteria')
   print(filter_criteria)
   print('the object for the database')
-  print(mongodb_record_matches)
-  matched_object = mongodb_record_matches.find_one(filter_criteria)
+  print(match_collection)
+  matched_object = match_collection.find_one(filter_criteria)
   print('matched object')
   print(matched_object)
   #print(matched_object)
@@ -732,7 +695,7 @@ def user_wants_to_match(user, match_queue_id):
         # Add more fields and values to update as needed
         }
     }
-    mongodb_record_matches.update_one(filter_criteria, update_values)
+    match_collection.update_one(filter_criteria, update_values)
     #print('match owner wants to match is set to true')
 
 
@@ -744,7 +707,7 @@ def user_wants_to_match(user, match_queue_id):
         # Add more fields and values to update as needed
         }
     }
-    mongodb_record_matches.update_one(filter_criteria, update_values)
+    match_collection.update_one(filter_criteria, update_values)
     #print('match wants to match is set to true')
 
 
@@ -756,7 +719,7 @@ def user_wants_to_match(user, match_queue_id):
         print('updating the owner')
         #update the the match
         filter_criteria = {"_id" : ObjectId(matched_object['match_id'])}
-        matched_user = mongodb_records.find_one(filter_criteria)
+        matched_user = user_data_collection.find_one(filter_criteria)
         matches = matched_user['matches']
 
         queued_matches = matched_user['match_queue']
@@ -772,14 +735,14 @@ def user_wants_to_match(user, match_queue_id):
           # Add more fields and values to update as needed
           }
         }
-        mongodb_records.update_one(filter_criteria, update_values)
+        user_data_collection.update_one(filter_criteria, update_values)
         #print('match updated')
 
     if mongodb_user['email'] != matched_object['match_owner_email']:
         print('updating the match')
         #update the owner who matched
         filter_criteria = {"email" : matched_object['match_owner_email']}
-        user_object = mongodb_records.find_one(filter_criteria)
+        user_object = user_data_collection.find_one(filter_criteria)
 
         #print(user_object)
         matches_user = user_object['matches']
@@ -800,13 +763,13 @@ def user_wants_to_match(user, match_queue_id):
           # Add more fields and values to update as needed
           }
         }
-        mongodb_records.update_one(filter_criteria, update_values)
+        user_data_collection.update_one(filter_criteria, update_values)
         #print('user updated')
 
 def get_user_profile(email, debug = False):
 
   filter_criteria = {"email" : email}
-  matched_object = mongodb_records.find_one(filter_criteria)
+  matched_object = user_data_collection.find_one(filter_criteria)
 
   mongodb_user = {
         "first_name" : matched_object['first_name'],
@@ -835,7 +798,7 @@ def get_user_profile(email, debug = False):
 def get_matched_object(match_id):
 
   filter_criteria = {"_id" : ObjectId(match_id)}
-  matched_object = mongodb_record_matches.find_one(filter_criteria)
+  matched_object = match_collection.find_one(filter_criteria)
 
   matched_object = {
     "match_name" : matched_object["match_name"],
@@ -858,7 +821,7 @@ def send_match_text(user, match_id, message_string):
 
   filter_criteria = {"_id" : ObjectId(match_id)}
 
-  matched_object = mongodb_record_matches.find_one(filter_criteria)
+  matched_object = match_collection.find_one(filter_criteria)
 
   chat_object = {
     "owner_email" : mongodb_user['email'],
@@ -876,7 +839,7 @@ def send_match_text(user, match_id, message_string):
         # Add more fields and values to update as needed
         }
     }
-  mongodb_record_matches.update_one(filter_criteria, update_values)
+  match_collection.update_one(filter_criteria, update_values)
 
 def delete_match_text(user, match_id, msg_datetime, message_string):
 
@@ -884,7 +847,7 @@ def delete_match_text(user, match_id, msg_datetime, message_string):
 
   filter_criteria = {"_id" : ObjectId(match_id)}
 
-  matched_object = mongodb_record_matches.find_one(filter_criteria)
+  matched_object = match_collection.find_one(filter_criteria)
 
   chat_log = matched_object['chat_text']
 
@@ -900,4 +863,4 @@ def delete_match_text(user, match_id, msg_datetime, message_string):
         # Add more fields and values to update as needed
         }
     }
-  mongodb_record_matches.update_one(filter_criteria, update_values)
+  match_collection.update_one(filter_criteria, update_values)
