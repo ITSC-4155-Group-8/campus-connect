@@ -601,7 +601,6 @@ def query_records(user, num):
 
   # now that the documents have been returned do a chat gpt call to write if these two people would be compatible friends
 
-
 def create_matches(matches):
 
   match_ids = []
@@ -609,7 +608,21 @@ def create_matches(matches):
   for match_ppl in matches:
     insert_result = match_collection.insert_one(match_ppl)
     #print(insert_result.inserted_id)
+
     insert_id = insert_result.inserted_id
+
+    filter_criteria = {"_id" : insert_id}
+    matched_object = match_collection.find_one(filter_criteria)
+
+    update_values = {
+        "$set": {
+        "match_object_id" : str(insert_id)
+        # Add more fields and values to update as needed
+        }
+    }
+    match_collection.update_one(filter_criteria, update_values)
+    
+
     match_ids.append(str(insert_id))
 
   return match_ids
@@ -813,6 +826,7 @@ def get_matched_object(match_id):
     "owner_name" : matched_object['owner_name'],
     "match_id" : matched_object["match_id"],
     "match_owner_email" : matched_object["match_owner_email"],
+    "match_object_id" : matched_object["match_object_id"],
     "match_datetime" : matched_object["match_datetime"],
     "compatibility_score" : matched_object["compatibility_score"],
     "compatibility_description" : matched_object["compatibility_description"],
