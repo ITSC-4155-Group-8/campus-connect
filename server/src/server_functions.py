@@ -440,7 +440,6 @@ def sort_similar_users(data):
     sorted_data = sorted(sorted_data, key=lambda x: x['score'], reverse=True)
     #print(sorted_data)
     return sorted_data
-
 # finds compatible people and returns a result of people with an openAI explanation of why they are compatible
 #
 '''
@@ -459,22 +458,25 @@ def sort_similar_users(data):
 '''
 def query_records(user, num):
 
+
   print('querying records')
   mongodb_user = create_mongo_db_user(user)
   email = mongodb_user['email']
   user_mongo_db = ''
   #print(email)
 
+
   filter_criteria_user = {"email" : email}
   matched_object_user = user_data_collection.find_one(filter_criteria_user)
   owner_id = str(matched_object_user["_id"])
+
 
   list_of_pinecone_tags = ['bio', 'user_likes', 'user_dislikes', 'hidden_likes', 'hidden_dislikes']
   user_vectors = []
   # returns vectors for user and puts into an array
   for tag in list_of_pinecone_tags:
       pinecone_result = pc_index.fetch([email], namespace=tag)
-      # print(pinecone_result)
+      #print(pinecone_result)
       # pinecone_result returns an object, this is the parsed version only getting the vectors
       user_vectors.append(pinecone_result['vectors'][email]['values'])
       # note this is cheesed a bit here sloppy code
@@ -482,11 +484,43 @@ def query_records(user, num):
 
   #filter out already matched people with this
   # https://docs.pinecone.io/guides/data/filtering-with-metadata
+  matched_object = {
+    "match_name" : "",
+    "match_email" : "",
+    "match_id" : "",
+    "match_owner_email" : "",
+    "match_datetime" : datetime.datetime.now().isoformat(),
+    "compatibility_score" : "",
+    "compatibility_description" : "",
+    "chat_text" : [], # [chat_object]
+    "owner_wants_match": False,
+    "match_wants_match": False, 
+    }
+  matched_objects = []
+    
+  filter_criteria = {"match_owner_email" : mongodb_user['email']}
+  matched_object_owner = match_collection.find(filter_criteria)
+  
+  matched_objects.extend(matched_object_owner)
 
-  filters = {
-      "id": {"$ne": email},
-      "mongo_db_id": {"$ne": user_mongo_db}
-  }
+  filter_criteria2 = {"match_email" : mongodb_user['email']}
+  matched_object_owner2 = match_collection.find(filter_criteria)
+
+  matched_objects.extend(matched_object_owner2)
+
+  emails_to_exclude = []
+
+  for matched_object in matched_objects:
+    if matched_object['match_owner_email'] != mongodb_user['email']:
+      emails_to_exclude.append(matched_object['match_owner_email'])
+    if matched_object['match_email'] != mongodb_user['email']:
+      emails_to_exclude.append(matched_object['match_email'])
+  
+  emails_to_exclude.append(email)
+
+
+  filters = {"id": {"$nin": emails_to_exclude}, 
+             "mongo_db_id": {"$ne": user_mongo_db}}
 
   # query the pinecone database
   similar_users = []
@@ -586,8 +620,8 @@ def query_records(user, num):
     result_text = re.sub(r'USER_2', list_of_compatible_people_full[i]['first_name'], result_text)
     result_JSON = json.loads(result_text)
     result_JSON['owner_name'] = mongodb_user['first_name']
-    result_JSON['match_name'] = list_of_compatible_people_full[i]['first_name']
     result_JSON['owner_id'] = owner_id
+    result_JSON['match_name'] = list_of_compatible_people_full[i]['first_name']
     result_JSON['match_id'] = str(list_of_compatible_people_full[i]['_id'])
     result_JSON['match_email'] = str(list_of_compatible_people_full[i]['email'])
     result_JSON['match_owner_email'] = mongodb_user['email']
@@ -605,7 +639,6 @@ def query_records(user, num):
 
 
   # now that the documents have been returned do a chat gpt call to write if these two people would be compatible friends
-
 def create_matches(matches):
 
   match_ids = []
