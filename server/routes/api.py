@@ -54,7 +54,7 @@ def get_profile_data():
     
 @api_routes.route("/api/generate_matches", methods = [ 'POST' ])
 @login_required
-def generate_matches():
+def generate_matches_endpoint():
     user_data = user_data_collection.find_one({'email': User.get_user_by_id(current_user.id).__dict__['email']})
     if not user_data:
         return Response(status=500)
