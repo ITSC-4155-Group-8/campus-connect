@@ -31,7 +31,7 @@ export default function Header() {
 
                     <Box 
                     
-                    paddingRight="5px"
+                    paddingRight={"5px"}
                     paddingLeft={"5px"}>
                     <Flex
                         alignItems={"center"}
@@ -50,9 +50,12 @@ export default function Header() {
                             </Link>
                     </Flex>
                 </Box>
-                <Image src={imgsrc} height='50px' padding={"0"} />
+
+                <Link to={""}><Image src={imgsrc} height='50px' padding={"0"} /></Link>
+
                 <Box
-                paddingLeft="5px">
+                paddingLeft={"5px"}
+                paddingRight={"5px"}>
                     <Flex
                         alignItems={"center"}
                         gap={"35px"}>
