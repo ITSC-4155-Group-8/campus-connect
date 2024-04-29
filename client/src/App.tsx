@@ -44,7 +44,7 @@ function App() {
     } else {
         return (
             <>
-                <Header />
+                {!state.loggedin ? "" : !state.user ? "" : <Header />}
                 <Container maxWidth="container.lg">
                     {!state.loggedin ? <SplashPage /> : !state.user ? <SignupPage /> : <>
                     <Outlet context={{user: state.user.user_data, image: state.user.user.profile_pic}} />

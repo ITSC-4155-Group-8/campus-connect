@@ -18,7 +18,7 @@ function FriendsPage() {
                 const response = await fetch(apiURL + '/matches', {
                     credentials: "include",
                 })
-                const matches = (await response.json()).accepted
+                const matches = (await response.json()).matches
                 let match_arr = []
                 matches.forEach(async m => {
                     const r = await fetch(apiURL + '/users/' + m.match_id, {
@@ -40,8 +40,8 @@ function FriendsPage() {
     return (
         <>
             <Container position="absolute" mx="2%" my="6%" >    
-                <Text  fontSize={'4xl'}>Freinds List:</Text>      
-                <Text  fontSize={'xl'}>You have {(user.matches).length} freinds.</Text>  
+                <Text  fontSize={'4xl'}>Friends List:</Text>      
+                <Text  fontSize={'xl'}>You have {(user.matches).length} friend{user.matches.length === 1 ? '' : 's'}.</Text>  
                 {
                 state.map(m => <FriendCard user={m[1]}/>)
                 }   

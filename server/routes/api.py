@@ -79,7 +79,6 @@ def get_matches():
     
     for match in user_data['matches']:
         match_obj = get_matched_object(match)
-        match_obj.pop('_id')
         matches.append(match_obj)
 
     return jsonify({'match_queue': match_queue, 'matches': matches})
