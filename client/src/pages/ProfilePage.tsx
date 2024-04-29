@@ -27,7 +27,7 @@ import { useOutletContext } from 'react-router-dom';
 
 function ProfilePage() {
 
-    const { user } = useOutletContext();
+    const { user, image } = useOutletContext();
 
     const [editingProfile, setEditingProfile] = useState(false);
     const [editedHometown, setEditedHometown] = useState(Response.name);
@@ -51,7 +51,7 @@ function ProfilePage() {
         <>
             
             <Flex justifyContent={'flex-start'} padding='10' direction={'row'} gap={"50px"}>
-                <Image src={imgsrc} height='100px' width='100px' padding={"0"} />
+                <Image style={{borderRadius: '50px'}} src={image} height='100px' width='100px' padding={"0"} />
                 
                 <Flex
                 direction={"column"}
