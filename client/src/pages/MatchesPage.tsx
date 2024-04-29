@@ -60,7 +60,7 @@ function MatchesPage() {
                     Users Your Matched With:
                 </Text>  
                 {
-                state.map(m => <UserCard match={m[0]} user={m[1]}/>)
+                state.map(m => <UserCard key={m[0].match_object_id} owner={m[0].match_owner_email === user.email} match={m[0]} user={m[1]}/>)
             }
             </Flex>
         </>

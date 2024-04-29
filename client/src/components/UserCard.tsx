@@ -2,9 +2,8 @@ import { Card, CardHeader, CardBody, Heading, Text, Box, Button, Stack, useColor
 import { useState } from 'react';
 
 export default function UserCard(props) {
-    const user = props.user;
-    const match = props.match;
-    const [buttonText, setButtonText] = useState('False');
+    const { user, match, owner } = props;
+    const [buttonText, setButtonText] = useState((owner ? match.owner_wants_match : match.match_wants_match) ? "True" : "False");
     const handleClick =async () => {setButtonText('True')
         const response = await fetch(apiURL + '/matches/'+match.match_object_id+"/accept", {
             credentials: "include",
@@ -71,7 +70,7 @@ export default function UserCard(props) {
                                 Do they want to match?
                             </Heading>
                             <Text pt='2' fontSize='sm'>
-                                {user.match_wants_match}
+                                {(owner ? match.match_wants_match : match.owner_wants_match) ? "True" : "False"}
                             </Text>
                         </Box>
                     </Stack>
